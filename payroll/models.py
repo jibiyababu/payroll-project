@@ -30,7 +30,7 @@ class Employee(models.Model):
     jobLocation=models.CharField(max_length=15,blank=True)
     confirmationPeriod=models.IntegerField(blank=True,default=2)
     department=models.CharField(max_length=15,blank=True)
-    #salary=models.DecimalField(decimal_places=2,max_digits=10)
+    salary=models.DecimalField(decimal_places=2,max_digits=10, default=decimal.Decimal('0.0000000000'))
     
 
     def publish(self):
