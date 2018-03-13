@@ -32,7 +32,7 @@ class Employee(models.Model):
     job_location=models.CharField(max_length=50,blank=True)
     probation_period=models.IntegerField(blank=True,default=2)
     #department=models.CharField(max_length=50,blank=True)
-    salary=models.DecimalField(max_digits=10, decimal_places=7, default=decimal.Decimal('0000000.000'))
+    salary=models.DecimalField(max_digits=12, decimal_places=4, default=decimal.Decimal('0000000.000'))
     def publish(self):
         self.save()
     def __str__(self):
@@ -79,9 +79,9 @@ class Leave_History(models.Model):
     '''
     employee=models.ForeignKey(Employee,blank=True, null=True)
     work_type=models.ForeignKey("company.Work_Type",blank=True,null=True)
-
+    
     attendance=models.ForeignKey("attendance.Attendance", blank=True, null=True)
-    leave_type=models.CharField(max_length=200)
+    leave_type=models.CharField(max_length=200,default="None")
     date=models.DateField()
     def publish(self):
         self.save()

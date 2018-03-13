@@ -38,7 +38,11 @@ class Work_Type(models.Model):
     '''
     company=models.ForeignKey(Company, blank=True, null=True)
     work_type=models.CharField(max_length=200)
-    
+    def publish(self):
+        self.save()
+    def __str__(self):
+        return self.company.name+" "+self.work_type
+
 class Designation(models.Model):
     '''
     designation model stores designations for particular company
