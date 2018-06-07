@@ -1,0 +1,222 @@
+{% load staticfiles %}
+        <!doctype html>
+        <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                <meta name="description" content="">
+                <meta name="author" content="">
+                <link rel="icon" href="../../../../favicon.ico">
+
+                <title>Payroll Dashboard Template for Bootstrap</title>
+
+                <!-- Bootstrap core CSS -->
+                <link href="{% static 'css/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+                <!-- Custom styles for this template -->
+                <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+            </head>
+
+
+
+<body>
+<form target="_blank">
+ <div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-sm-12">
+
+<div class="card mb-3">
+                <div class="card-body">
+
+
+
+<div class="form-group">
+<div class="row">
+<div class="col">
+ <address>
+
+                                {% if user.is_authenticated %}
+                                <strong>{{ request.user.employee.company.name }}</strong>
+                                <br>
+                                {{ request.user.employee.company.address_line_1 }}
+                                <br>
+                                {{ request.user.employee.company.address_line_2 }}
+
+                                {{ request.user.employee.company.state }}
+                                <br><abbr title="Phone">Pin-Code:</abbr>
+                                {{ request.user.employee.company.postal_code }}
+                                <br>
+                                {{ request.user.employee.company.website }}
+                                {% endif  %}
+                                </address>
+</div>
+
+
+<div class="col text-right">
+                            <p>
+                                <img src="{{request.user.employee.company.logo.url}}" width="30" height="30" class="d-inline-block align-left" alt=""><h3>Payrollz</h3>
+                                <em>Date: {{ salary.date }}</em>
+                            </p></div></div>
+
+
+<div class="row mt-auto">
+<div class="col text-center"><h4>Pay Slip for {{ salary.month_year }}</h4></div>
+</div>
+
+
+<div class ="row mt-auto border">
+<div class="col mt-3 pr-0">
+<div class="table-responsive-sm ">
+<table class="table table-sm float-center " style=" border:none; font-weight:bold">
+<tr>
+<td  style="width: 16.66%">Employee:</td>
+<td >{{ salary.employee }}</td>
+<td >Month:</td>
+<td >{{ salary.date }}</td>
+</tr>
+<tr>
+    <td style="width: 16.66%">Department:</td>
+    {% if dept %}
+
+    <td >{{dept.department.get_department_display}}</td>
+    {% else %}
+    <td  >{{dept}}</td>
+    {% endif  %}
+<td  >Total Days:</td>
+    <td >{{ salary.total_days }}</td>
+
+</tr>
+<tr>
+<td style="width: 16.66%">Designation:</td>
+{% if desgn %}
+<td >{{desgn.designation.get_designation_display}}</td>
+{% else %}
+<td >{{desgn}}</td>
+{% endif %}
+<td  >Weekends & Public Holidays: </td>
+    <td >{{ salary.weekend}}+{{salary.public_holidays }}</td>
+</tr>
+<tr>
+<td style="width: 16.66%">Joining Date:</td>
+<td ">{{ salary.employee.joining_date }}</td>
+<td >Working Days:</td>
+<td >{{ salary.working_days }}</td>
+</tr>
+<tr>
+<td >Attendance:</td>
+<td >{{ salary.attendance }}</td>
+
+
+
+
+
+</table></div>
+</div>
+
+</div>
+
+<div class="row mt-auto border">
+<div class="col">
+<div class="table-responsive">
+<table class="table table-sm " style="border:none; font-weight:bold">
+
+
+<thead>
+<tr>
+<th colspan=2  class="text-left"> Allowance:</th>
+<!-- <th  class="text-center"> <strong ></strong></th> -->
+
+<th colspan=2 class="text-left"> Deduction:</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="width: 16.66%">Basic:</td>
+<td >  {{salary.basic_amount }} </td>
+<td style="width: 16.66%">Proffessional Tax:</td>
+<td> {{ salary.proffessional_tax }} </td>
+</tr>
+<tr>
+<td  style="width: 16.66%">HRA:</td>
+<td>  {{salary.hra_amount }} </td>
+<td  style="width: 16.66%">Income Tax: </td>
+<td>  {{ salary.income_tax }} </td>
+</tr>
+<tr>
+<td style="width: 16.66%">Conveyance Allowance:</td>
+<td>  {{salary.conveyance_allowance }} </td>
+<td rowspan=2 style="width: 16.66%">Loss of Pay:</td>
+<td rowspan=2> {{ salary.loss_of_pay }} </td>
+</tr>
+<tr>
+<td style="width: 16.66%">Special Allowance:</td>
+<td>  {{salary.special_allowance }} </td>
+</tr>
+<tr >
+<td style="padding:15px;width: 16.66%" >Gross Earnings:</td>
+<td style="padding:15px"> {{ salary.gross_earning }}  </td>
+<td style="padding:15px;width: 16.66%">Gross Deduction:</td>
+<td style="padding:15px">{{ salary.gross_deduction }} </td>
+</tr>
+
+
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="row mt-5 ">
+<div class="col">
+<div class="table-responsive-sm">
+<table class="table table-sm" style="border:none;font-style:italic; font-weight:bold">
+
+<tr>
+<td>Net Salary:</td>
+<td>{{ salary.net_salary }}</td>
+</tr>
+<tr>
+<td>Total amount in words:</td>
+<td>{{amount_words}}</td>
+</tr>
+
+
+
+<!-- <tr>
+     <td colspan=3 style=" vertical-align: bottom width: 16.66%" ><strong><h6><strong>Net Salary:</h6></strong></td>
+
+     <td  style="vertical-align: bottom"><h6><strong>{{ salary.net_salary }}</strong></h6>  </td>
+     </tr>
+     <tr colspan=2>
+     <td>Total amount in words:</td>
+
+     <td><strong>{{amount_words}}</strong></td>
+     </tr>
+     x -->
+</table>
+</div>
+</div>
+</div>
+
+<div class="row my-5 ">
+<div class ="col">
+<p class="text-center"><em>Note: This is a computer generated pay slip hence does not require signature.</em></p>
+</div>
+</div>
+<div class ="row justify-content-center">
+
+<a class="btn btn-primary btn-md " target="_blank" href="{% url 'salary_pdf' pk=salary.pk %}">Print</a>
+
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>

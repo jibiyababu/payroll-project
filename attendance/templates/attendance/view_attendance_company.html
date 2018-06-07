@@ -1,0 +1,132 @@
+{% extends 'attendance/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1>Check Attendance</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'mark_attendance'  %}">Mark Attendance</a>
+     </li>
+
+     <li class="nav-item">
+     <a class="nav-link " href="{% url 'view_attendance'  %}">View Attendance</a>
+     </li>
+
+
+     <li class="nav-item">
+     <a class="nav-link active" href="{% url 'view_attendance_company'  %}">View Attendance Company</a>
+     </li>
+    </ul>
+    </div>
+
+
+</div>
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+</div>
+
+     <form method="POST" class="employee-form">{% csrf_token %}
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-center ">
+            <div class="col-md-3 justify-center">
+                <div class="form-group">
+                    {{ form.monthdate.errors }}
+                    {{ form.monthdate.label_tag }}
+                    {{ form.monthdate }}
+                </div>
+            </div>
+            <div class="col justify-center">
+                   <div class="form-group">
+                      <br> <button type="submit" class="btn btn-primary btn-sm">View</button>
+                   </div>
+            </div>
+        </div>
+
+
+     </form>
+
+     {% if records %}
+
+         <h4 class="mt-5 text-center">Attendance for {{date}}</h4>
+
+     <div class="row mt-5">
+
+              <div class="col-md-6 m-auto">
+                  <!-- <div id="table-scroll" class="table-scroll">
+                       <div class="table-wrap">
+                       <table class=" main-table table table-md table-responsive table-wrap"> -->
+
+
+                  <div class="table-responsive-sm">
+                      <table class="table table-sm table-striped" style="border-collapse:separate">
+
+                          <thead class="thead-dark">
+
+                    <tr>
+
+                        <th  scope="col">Employee</th>
+
+                        <th  scope="col">Date</th>
+                        <th  scope="col">Mark</th>
+                        <th  scope="col">Leave-Type</th>
+                        <th nowrap  scope="col">Privilege Leave</th>
+                        <th nowrap  scope="col">Casual Leave</th>
+                        <!-- <th  scope="col">Job-Type</th>
+                             <th  scope="col">Last Salary Generated</th>
+                             <th  scope="col">Last Salary Updated</th>
+                             <th  scope="col">Action</th>
+                           -->
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for obj in records %}
+                    <tr>
+                        <td>{{obj.employee}}</td>
+                        <td>{{obj.date}}</td>
+                        <td>{{obj.mark}}</td>
+                        {% if obj.leave_type%}
+                        <td>{{obj.leave_type}}</td>
+                        {%else%}
+                        <td>None</td>
+                        {%endif%}
+                        <td>{{obj.remPrivilegeLeave}}</td>
+                        <td>{{obj.remCasualLeave}}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+</div>
+</div>
+</div>
+
+
+
+{% else %}
+<p>
+<h6 class="alert-info text-center">No records to show.</h6>
+</p>
+{% endif%}
+
+{%endblock%}

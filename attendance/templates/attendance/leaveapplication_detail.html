@@ -1,0 +1,68 @@
+{% extends 'attendance/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1>Leave Application</h1>
+
+
+</div>
+
+     <div class="col-sm-7">
+         <!-- {% for message in messages %}
+              <div class="alert alert-success">
+              <a class="close" href="#" data-dismiss="alert">×</a>
+
+              {{ message }}
+            -->
+     </div>
+    {% endfor %}
+
+    <div class="table-responsive-sm">
+        <div class="row">
+            <div class="col-8">
+        <table class="table table-sm">
+            <tr>
+                <td><strong>Employee</strong></td>
+                <td ><strong>Leave From</strong></td>
+                <td ><strong>Leave To<strong></td>
+                <td ><strong>Leave Type</strong></td>
+                <td ><strong>Remark</strong></td>
+
+            </tr>
+            {% for lv in leaveapplication %}
+            <tr>
+                <td>{{lv.employee}}</strong></td>
+                <td >{{lv.leave_from}}</strong></td>
+                <td >{{lv.leave_to}}<strong></td>
+                <td >{{lv.leave_type}}</strong></td>
+                <td ><strong>{{lv.get_remark_display}}</strong></td>
+
+            </tr>
+
+
+                    {% endfor %}
+                </table>
+            </div>
+</div>
+<div class="row">
+            <div class="col-4">
+                <h6><strong>Leave Balance:</strong><h6>
+                <div class="table-responsive-sm border">
+                    <table class="table table-sm">
+                        <tr class="table-active">
+                            <td ><strong>PL</strong></td>
+                            <td ><strong>CL</strong></td>
+
+                        </tr>
+                         {% for lv in leave %}
+                        <tr class="table">
+                            <td>{{lv.remPrivilegeLeave}}</td>
+                            <td>{{lv.remCasualLeave}}</td>
+                        </tr>
+ {% endfor %}
+                </div>
+
+</div>
+            </div>
+
+            {% endblock  %}

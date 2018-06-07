@@ -1,9 +1,258 @@
-{% extends 'payroll/base.html' %}
-
+{% extends 'payroll/user/base.html' %}
+{%include 'payroll/messages.html' %}
 {% block content %}
-<h1>New Employee</h1>
-<form method="POST" class="employee-form">{% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Save</button>
-</form>
-{% endblock %}
+
+<h1>Edit Employee</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'add_employee'  %}">Add Employee</a>
+     </li>
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'employee_list'  %}" >View All Employee</a>
+     </li>
+
+     <li class="nav-item">
+     <a class="nav-link active" href="{% url 'admin_detail'  %}">Update Admin Profile</a>
+     </li>
+
+
+
+     </ul>
+     </div>
+
+
+
+
+</div>
+<div class="col-sm-7">
+     {% for message in messages %}
+         <div class="alert alert-success">
+         <a class="close" href="#" data-dismiss="alert">×</a>
+
+         {{ message }}
+
+         </div>
+         {% endfor %}
+{% if employee %}
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+
+    <div class="row border-bottom mb-md-2 ">
+        <div class="col">
+
+            <p><h4>Name: {{employee.user.username}}</h></p>
+
+        </div>
+        <div class="col">
+            <div class="form-group text-right">
+                <img  src="{{ employee.profile_pic.url  }}" width=100px height=100px>
+            </div>
+        </div>
+
+    </div>
+{% endif %}
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+
+
+
+
+
+        <!--
+             <div class="row">
+             <div class="col">
+             <div class="form-group">
+             {{ form.errors }}
+             {{ form.non_field_errors }}
+             </div>
+             </div>
+             </div>
+           -->
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.profile_pic.errors }}-->
+
+                    {{ form.profile_pic.label_tag }}
+                    {{ form.profile_pic}}<br>
+                    Currently:{{employee.profile_pic}}
+                </div></div></div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.address.errors }}-->
+                            {{ form.address.label_tag }}
+                            {{ form.address}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!--{{ form.contact.errors }}-->
+                            {{ form.contact.label_tag }}
+                            {{ form.contact}}
+                        </div>
+                    </div>
+
+
+
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.alter_Contact.errors }}-->
+                            {{ form.alter_Contact.label_tag }}
+                            {{ form.alter_Contact}}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.Dob.errors }}-->
+                            {{ form.Dob.label_tag }}
+                            {{ form.Dob}}
+                        </div>
+                    </div>
+
+
+
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.emailid.errors }}-->
+                            {{ form.emailid.label_tag }}
+                            {{ form.emailid}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.gender.errors }}-->
+                            {{ form.gender.label_tag }}
+                            {{ form.gender}}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.joining_date.errors }}-->
+                            {{ form.joining_date.label_tag }}
+                            {{ form.joining_date}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ form.salary.errors }}-->
+                            {{ form.salary.label_tag }}
+                            {{ form.salary}}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ desgform.designation.errors }}-->
+                            {{ desgform.designation.label_tag }}
+                            {{ desgform.designation}}
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ deptform.department.errors }}-->
+                            {{ deptform.department.label_tag  }}
+                            {{ deptform.department}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ jobtypeform.jobtype.errors }}-->
+                            {{ jobtypeform.job_type.label_tag }}
+                            {{ jobtypeform.job_type}}
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ salaryform.basic_percentage.errors }}-->
+                            {{ salaryform.basic_percentage.label_tag }}
+                            {{ salaryform.basic_percentage}}
+                        </div>
+                    </div>
+                     <div class="col">
+                        <div class="form-group">
+                           <!-- {{ salaryform.hra_percentage.errors }}-->
+                            {{ salaryform.hra_percentage.label_tag }}
+                            {{ salaryform.hra_percentage}}
+                        </div>
+                     </div>
+
+                     <div class="col">
+                        <div class="form-group">
+                           <!-- {{ salaryform.conveyance_allowance.errors }}-->
+                            {{ salaryform.conveyance_allowance.label_tag }}
+                            {{ salaryform.conveyance_allowance}}
+                        </div>
+                    </div>
+                </div>
+
+
+<div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                           <!-- {{ salaryform.special_allowance.errors }}-->
+                            {{ salaryform.special_allowance.label_tag }}
+                            {{ salaryform.special_allowance}}
+                        </div>
+                    </div>
+                     <div class="col">
+                        <div class="form-group">
+                            <!-- {{ salaryform.proffessional_tax.errors }} -->
+                            {{ salaryform.proffessional_tax.label_tag }}
+                            {{ salaryform.proffessional_tax}}
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="form-group">
+                            <!-- {{ salaryform.income_tax.errors }} -->
+                            {{ salaryform.income_tax.label_tag }}
+                            {{ salaryform.income_tax}}
+                        </div>
+                     </div>
+                     </div>
+
+
+
+
+
+
+
+
+                     <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Update</button>
+                     <a class="btn btn-primary btn-sm" name='btnCompany' href={% url 'employee_detail' pk=employee.pk %}>View Profile</a>
+{% endblock  %}

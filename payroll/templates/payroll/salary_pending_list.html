@@ -1,0 +1,178 @@
+{% extends 'payroll/base.html' %}
+{%include 'payroll/messages.html' %}
+{% block content %}
+
+<h1>Pending Salary For {{date_now}} </h1>
+
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+
+
+        <li class="nav-item">
+            <a class=" btn btn-light btn-sm" href="{% url 'update_salary'  %}">Update Salary
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="active btn btn-light btn-sm" href="{% url 'salary_pending_list'  %}">Pending Salary
+            </a>
+        </li>
+
+        <li class="nav-item">
+
+            <a class=" btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            </a>
+
+        </li>
+
+        <li class="nav-item">
+
+            <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
+            </a>
+
+        </li>
+
+
+
+    </ul>
+</div>
+
+</div>
+
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+</div>
+
+
+<div class="row">
+    <div class="col-md-8 m-auto">
+
+    <canvas id="pie-chart" width="100" height="50"></canvas>
+         <script>
+         new Chart(document.getElementById("pie-chart"), {
+         type: 'pie',
+         data: {
+         labels: ["Paid", "Unpaid"],
+         datasets: [{
+         label: "Payroll(millions)",
+         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+         data: [{{paid}},{{unpaid}}]
+         }]
+         },
+         options: {
+         title: {
+         display: true,
+         text: 'Payroll Estimated for {{date_now}} '
+         }
+         }
+         });
+         </script>
+</div>
+</div>
+
+
+<div id="table-scroll" class="table-scroll mt-3">
+         <div class="table-wrap">
+            <!--table class="main-table"-->
+
+            <table  class=" main-table table table-md table-responsive table-wrap" >
+                <thead class="thead-dark">
+
+                    <tr>
+
+                        <th class="fixed-side" scope="col">Name</th>
+                        <th  scope="col">Email Id</th>
+                        <th  scope="col">Contact</th>
+                        <th  scope="col">Alternate Contact</th>
+                        <th  scope="col">Department</th>
+                        <th  scope="col">Designation</th>
+                        <th  scope="col">Job-Type</th>
+                        <th  scope="col">Last Salary Generated</th>
+                        <th  scope="col">Month-Year</th>
+                        <th  scope="col">Last Salary Updated</th>
+                        <th  scope="col">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp,salary,dept,desgn,jobtype,salary_history in zipped_list %}
+                    <tr><td><a class="fixed-side text-info font-weight-bold " href="{% url 'employee_detail' pk=emp.pk  %}">{{emp.user.username}}</a></td>
+                        <td>{{emp.emailid}}</td>
+                        <td>{{emp.contact}}</td>
+                        <td>{{emp.alter_Contact}}</td>
+                        <td>
+                            {% if dept %}
+                            {{dept.department.get_department_display}}</td>
+                            {% else %}
+                            {{dept}}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if desgn %}
+                            {{desgn.designation.get_designation_display}}
+                            {% else %}
+                            {{desgn}}
+                            {% endif %}
+                         </td>
+
+                        <td>
+                            {% if jobtype  %}
+                            {{jobtype.job_type.get_jobtype_display}}</td>
+                            {% else %}
+                            {{jobtype}}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if salary%}
+                            <!-- class="text-danger font-italic font-bold" -->
+                            {{salary.date}}
+                            {% else %}
+                            {{salary}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if salary%}
+                            <!-- class="text-danger font-italic font-bold" -->
+                            {{salary.month_year}}
+                            {% else %}
+                            {{salary}}
+                            {% endif %}
+                        </td>
+
+
+                        <td>{% if salary_history %}
+                            {{ salary_history.date  }}
+                            {% else %}
+                            {{salary_history}}
+                            {% endif %}
+                        </td>
+                            <td><a class="btn btn-dark btn-sm" href="{% url 'update_salary' pk=emp.pk    %}">Update Salary</a></td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    {% if message %}
+    <div class="card">
+          <div class="card-body">
+   <p class=""> {{message}}</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

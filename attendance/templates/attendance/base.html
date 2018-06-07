@@ -1,0 +1,168 @@
+{% load staticfiles %}
+
+
+<!doctype html>
+<html lang="en">
+    <head>
+
+
+
+
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="{{ request.user.employee.company.logo.url}}">
+
+        <title>Payroll For {{ request.user.employee.company.name }}     </title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'company/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/payroll.css' %}" rel="stylesheet">
+
+                                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/        GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+
+             <script src="{% static 'assets/js/vendor/popper.min.js' %}"></script>
+                 <script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
+
+<script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"> </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+
+
+    </head>
+
+    <body>
+
+
+
+
+
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+
+
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+                <img src="{{request.user.employee.company.logo.url}}" width="30" height="30" class="d-inline-block align-left" alt="">
+                {% if user.is_authenticated %}
+                {{ request.user.employee.company.name }}
+                {% endif  %}
+            </a>
+
+            <!--
+                 <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"></a> -->
+            <!-- {{ request.session.company }} -->
+            <!--input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"-->
+            <ul class="navbar-nav px-3 ">
+                <li class="nav-item text-nowrap">
+
+
+                    {% if user.is_authenticated %}
+                    <p class="pt-3 nav-link active d-inline ">Logged in as <strong class="alert">{{ request.user.username }}</strong> <a class="nav-link" href="{% url 'logout' %}">Sign out</a></p>
+
+                    {% endif  %}
+                </li>
+
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
+
+                            <li class="nav-item ">
+                                <a class="nav-link " href="{% url 'employee_detail' pk=request.user.employee.pk  %}">
+                                    <span data-feather="user"></span>
+                                    Profile
+                                </a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link " href="{% url 'edit_company'  %}">
+                                    <span data-feather="home"></span>
+                                    Company
+                                </a>
+                            </li>
+<li class="nav-item">
+                                <a class="nav-link " href="{% url 'employee_list'  %}">
+                                    <span data-feather="users"></span>
+                                    Employee<span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'mark_attendance' %}">
+                                    <span data-feather="edit"></span>
+                                    Attendance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'salary_employee_list'  %}">
+                                    <span data-feather="dollar-sign"></span>
+                                    Salary
+                                </a>
+                            </li>
+
+                        </ul>
+
+
+                    </div>
+                </nav>
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                        {% block content %}
+                        {% endblock %}
+
+             </form>
+                    </div>
+            </div>
+
+
+
+            <!-- Icons -->
+                 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+
+            <script>
+                feather.replace()
+$('.dropdown-toggle').dropdown()
+            </script>
+
+
+
+
+
+
+            <script>
+             $('#leave_type').hide();
+
+
+             $(document).ready(function() {
+                 $('select[name = "mark"]').change(function(){
+
+                     if ($(this).val() == "0"){
+                         $('div#leave_type').show();
+                     }
+
+                     if ($(this).val() == "1"){
+                         $('div#leave_type').hide();
+                     }
+
+                     if ($(this).val() == "0.5"){
+                         $('div#leave_type').hide();
+                     }
+                 });
+             });
+
+            </script>
+
+
+
+   </body>
+
+</html>

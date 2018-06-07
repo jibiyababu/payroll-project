@@ -1,0 +1,358 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        </head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="../../../../favicon.ico">
+
+        <title>Payroll Dashboard Template for Bootstrap</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'css/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+        <style type="text/css">
+
+         @page {
+             size: A4;
+             @frame content_frame {
+                 left: 50pt;
+                 width: 512pt;
+                 top: 50pt;
+                 height: 692pt;
+                 -pdf-frame-border: 1;    /* for debugging the layout */
+             }
+                 }
+
+
+        </style>
+<!--  <style type="text/css">
+             body {
+             font-size: .875rem;
+             }
+
+             .feather {
+             width: 16px;
+             height: 16px;
+             vertical-align: text-bottom;
+             }
+
+             /*
+             * Sidebar
+             */
+
+             .sidebar {
+             position: fixed;
+             top: 0;
+             bottom: 0;
+             left: 0;
+             z-index: 100; /* Behind the navbar */
+             padding: 0;
+             box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+             }
+
+             .sidebar-sticky {
+             position: -webkit-sticky;
+             position: sticky;
+             top: 48px; /* Height of navbar */
+             height: calc(100vh - 48px);
+             padding-top: .5rem;
+             overflow-x: hidden;
+             overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+             }
+
+             .sidebar .nav-link {
+             font-weight: 500;
+             color: #333;
+             }
+
+             .sidebar .nav-link .feather {
+             margin-right: 4px;
+             color: #999;
+             }
+
+             .sidebar .nav-link.active {
+             color: #007bff;
+             }
+
+             .sidebar .nav-link:hover .feather,
+             .sidebar .nav-link.active .feather {
+             color: inherit;
+             }
+
+             .sidebar-heading {
+             font-size: .75rem;
+             text-transform: uppercase;
+             }
+
+             /*
+             * Navbar
+             */
+
+             .navbar-brand {
+             padding-top: .75rem;
+             padding-bottom: .75rem;
+             font-size: 1rem;
+             background-color: rgba(0, 0, 0, .25);
+             box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+             }
+
+             .navbar .form-control {
+             padding: .75rem 1rem;
+             border-width: 0;
+             border-radius: 0;
+             }
+
+             .form-control-dark {
+             color: #fff;
+             background-color: rgba(255, 255, 255, .1);
+             border-color: rgba(255, 255, 255, .1);
+             }
+
+
+             .form-control-dark:focus {
+             border-color: transparent;
+             box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+             }
+
+             /*
+             * Utilities
+             */
+
+             .border-top { border-top: 1px solid #e5e5e5; }
+             .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+
+
+
+
+
+
+             /*my css*/
+             .center{
+             margin:auto;
+             width: 40%;
+             border: 3px;
+             padding-top: 10px;
+             }
+
+             .container{
+             border-style=solid;
+             border-color=grey;
+             }
+             .table {
+             border-collapse: collapse;
+             border: 1px solid black;
+             }
+             </style>
+           -->
+
+
+    </head>
+    <body>
+        <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-sm-12">
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+
+
+
+                            <!-- <div class="form-group"> -->
+                                <div class="row">
+                                    <div class="col">
+                                        <address>
+
+                                            <!-- {% if user.is_authenticated %} -->
+                                            <strong>{{ salary.employee.company.name }}</strong>
+                                            <br>
+                                            {{ salary.employee.company.address_line_1 }}
+                                            <br>
+                                            {{ salary.employee.company.address_line_2 }}
+
+                                            {{salary.employee.company.state }}
+                                            <br><abbr title="Phone">Pin-Code:</abbr>
+                                            {{ salary.employee.company.postal_code }}
+                                            <br>
+                                            {{ salary.employee.company.website }}
+                                            <!-- {% endif  %} -->
+                                        </address>
+                                    </div>
+
+
+                                    <div class="col text-right">
+                                        <p>
+                                            <img src="{{ encoded_string.url }}" width="30" height="30"  class="d-inline-block align-left"  alt="noimage"><h3>Payrollz</h3>
+                                            <em>Date: {{ salary.date }}</em>
+                                        </p></div></div>
+
+
+                                <div class="row mt-auto">
+                                    <div class="col text-center"><h4>Pay Slip for {{ salary.date }}</h4></div>
+                                </div>
+
+
+                                <div class ="row mt-auto border">
+                                    <div class="col mt-3 pr-0">
+                                        <div class="table-responsive-sm ">
+                                            <!--  -->
+                                            <table class="table table-sm float-center " style=" border:1; font-weight:bold font-size:'12'">
+                                                <tr>
+                                                    <td  style="width: 16.66%">Employee:</td>
+                                                    <td >{{ salary.employee }}</td>
+                                                    <td >Month:</td>
+                                                    <td >{{ salary.date }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 16.66%">Department:</td>
+                                                    {% if dept %}
+
+                                                    <td >{{dept.department.get_department_display}}</td>
+                                                    {% else %}
+                                                    <td  >{{dept}}</td>
+                                                    {% endif  %}
+                                                    <td  >Total Days:</td>
+                                                    <td >{{ salary.total_days }}</td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 16.66%">Designation:</td>
+                                                    {% if desgn %}
+                                                    <td >{{desgn.designation.get_designation_display}}</td>
+                                                    {% else %}
+                                                    <td >{{desgn}}</td>
+                                                    {% endif %}
+                                                    <td  >Weekends & Public Holidays: </td>
+                                                    <td >{{ salary.weekend}}+{{salary.public_holidays }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 16.66%">Joining Date:</td>
+                                                    <td ">{{ salary.employee.joining_date }}</td>
+                                                    <td >Working Days:</td>
+                                                    <td >{{ salary.working_days }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td >Attendance:</td>
+                                                    <td >{{ salary.attendance }}</td>
+
+</tr>
+
+
+
+                                            </table></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-auto border">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm " style="border:none; font-weight:bold">
+
+
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=2  class="text-left"> Allowance:</th>
+                                                        <!-- <th  class="text-center"> <strong ></strong></th> -->
+
+                                                        <th colspan=2 class="text-left"> Deduction:</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width: 16.66%">Basic:</td>
+                                                        <td>  {{salary.basic_amount }} </td>
+                                                        <td style="width: 16.66%">Proffessional Tax:</td>
+                                                        <td> {{ salary.proffessional_tax }} </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td  style="width: 16.66%">HRA:</td>
+                                                        <td>  {{salary.hra_amount }} </td>
+                                                        <td  style="width: 16.66%">Income Tax: </td>
+                                                        <td>  {{ salary.income_tax }} </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 16.66%">Conveyance Allowance:</td>
+                                                        <td>  {{salary.conveyance_allowance }} </td>
+                                                        <td rowspan=2 style="width: 16.66%">Loss of Pay:</td>
+                                                        <td rowspan=2> {{ salary.loss_of_pay }} </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 16.66%">Special Allowance:</td>
+                                                        <td>  {{salary.special_allowance }} </td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td style="padding:15px;width: 16.66%" >Gross Earnings:</td>
+                                                        <td style="padding:15px"> {{ salary.gross_earning }}  </td>
+                                                        <td style="padding:15px;width: 16.66%">Gross Deduction:</td>
+                                                        <td style="padding:15px">{{ salary.gross_deduction }} </td>
+                                                    </tr>
+
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-5 ">
+                                    <div class="col">
+                                        <div class="table-responsive-sm">
+                                            <table class="table table-sm" style="border:none;font-style:italic; font-weight:bold">
+
+                                                <tr>
+                                                    <td>Net Salary:</td>
+                                                    <td>{{ salary.net_salary }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total amount in words:</td>
+                                                    <td>{{amount_words}}</td>
+                                                </tr>
+
+
+
+                                                <!-- <tr>
+                                                     <td colspan=3 style=" vertical-align: bottom width: 16.66%" ><strong><h6><strong>Net Salary:</h6></strong></td>
+
+                                                     <td  style="vertical-align: bottom"><h6><strong>{{ salary.net_salary }}</strong></h6>  </td>
+                                                     </tr>
+                                                     <tr colspan=2>
+                                                     <td>Total amount in words:</td>
+
+                                                     <td><strong>{{amount_words}}</strong></td>
+                                                     </tr>
+                                                     x -->
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row my-5 ">
+                                    <div class ="col">
+                                        <p class="text-center"><em>Note: This is a computer generated pay slip hence does not require signature.</em></p>
+                                    </div>
+                                </div>
+                                <div class ="row justify-content-center">
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>

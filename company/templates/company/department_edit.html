@@ -1,0 +1,91 @@
+{% extends 'company/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1>Add Department</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'edit_company'  %}">Company</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_holiday'  %}">Holiday</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'add_department'  %}">Department</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_designation'  %}">Designation</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_worktype'  %}">Work-Type</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_jobtype'  %}">Job-Type</a>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.department.errors }}
+                    {{ form.department.label_tag }}
+                    {{ form.department }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Add</button>
+
+
+
+
+<div class="row mt-4">
+    <div class="col">
+        <table class="table table-md" style="width: 80.66%">
+            <thead class="thead-dark">
+                <tr>
+
+                    <th scope="col">Holiday Name</th>
+                    <th  scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for record in dept %}
+
+
+
+                    <td>{{record.get_department_display}}</td>
+                    <td><a class="btn btn-light" href= "{% url 'department_delete' pk=record.pk  %}">Delete</a></td>
+                </tr>
+                <tbody>
+
+                    {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

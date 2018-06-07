@@ -1,0 +1,166 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="payroll_logo.png">
+
+        <title>Welcome</title>
+
+        <!-- Bootstrap Complete CSS V4.0 -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <!-- Custom styles for this template -->
+        <link href="styles.css" rel="stylesheet">
+        <link href="{% static 'css/product.css' %}" rel="stylesheet">
+    </head>
+    <body>
+
+        <nav class="site-header sticky-top py-1">
+            <div class="container d-flex flex-column flex-md-row justify-content-between">
+                <a class="py-2" href="#">
+                    <img src="{% static 'images/payroll_logo.png' %}" height="50" width="50"></img>
+                </a>
+                <a class="py-2 d-none d-md-inline-block" href="#">Features</a>
+                <a class="py-2 d-none d-md-inline-block" href="#">Services</a>
+                <a class="py-2 d-none d-md-inline-block" href="#">Pricing</a>
+                <a class="py-2 d-none d-md-inline-block" href="#">About Us</a>
+            </div>
+        </nav>
+
+        <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" style="background-image: url('{% static 'images/cover2.jpg' %}'); background-repeat: no-repeat; background-position: center; background-size: 100%;">
+            <div class="col-md-5 p-lg-5 mx-auto my-5">
+                <h1 class="display-4 font-weight-normal" style="color: black; text-shadow: 3px 2px orange; letter-spacing: 3px;">PayRollz</h1>
+                <p class="lead font-weight-normal" style="color: black; text-shadow: 3px 2px green; letter-spacing: 3px;">Easy to use payroll
+                    management system.</p>
+                <a class="btn btn-outline-primary" href="{% url 'login' %}">Log In</a>
+                <a class="btn btn-outline-primary" href="{% url 'signup'  %}">Sign Up</a>
+            </div>
+        </div>
+
+
+        <div style="background-color: #dee0e2">
+            <hr>
+            <div>
+                <center><h2>Managing payroll is easy with payrollz</h2></center>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                        <center>
+                        <div class="card" style="background-image: url('{% static 'images/design.jpg' %}'); background-repeat: no-repeat; background-position: center; background-size: 100%; width: 20rem; height: 20rem;">
+                          <center><img class="zoom" src="{% static 'images/easy.png' %}" alt="Card image cap" height="110px" width="110px" ></center>
+                          <div class="card-body">
+                            <h5 class="card-title">Easy to use</h5>
+                            <p class="card-text">Process your payroll in a few mouse clicks.</p>
+                          </div>
+                        </div>
+                        </center>
+                </div>
+                <div class="col">
+                        <center>
+                        <div class="card" style="background-image: url('{% static 'images/design.jpg' %}'); background-repeat: no-repeat; background-position: center; background-size: 100%; width: 20rem; height: 20rem;">
+                          <center><img class="zoom" src="{% static 'images/secure.png' %}" alt="Card image cap" height="110px" width="110px" ></center>
+                          <div class="card-body">
+                            <h5 class="card-title">Security</h5>
+                            <p class="card-text">Password protection, data encryption, firewalls, and automatic input confirmation ensure only authorized personnel can access your company’s confidential payroll information.</p>
+                          </div>
+                        </div>
+                        </center>
+                </div>
+                <div class="col">
+                        <center>
+                        <div class="card" style="background-image: url('{% static 'images/design.jpg' %}'); background-repeat: no-repeat; background-position: center; background-size: 100%; width: 20rem; height: 20rem;">
+                          <center><img class="zoom" src="{% static 'images/24-7.png' %}" alt="Card image cap" height="110px" width="110px" ></center>
+                          <div class="card-body">
+                            <h5 class="card-title">Customer service</h5>
+                            <p class="card-text"> Customer satisfaction is our primary goal and we are passionate about wanting to help address all of your concerns with a human touch.</p>
+                          </div>
+                        </div>
+                        </center>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                        <center>
+                        <div class="card" style="background-image: url('{% static 'images/design.jpg' %}'); background-repeat: no-repeat; background-position: center; background-size: 100%; width: 20rem; height: 20rem;">
+                          <center><img class="zoom" src="{% static 'images/convenience.png' %}" alt="Card image cap" height="110px" width="110px" ></center>
+                          <div class="card-body">
+                            <h5 class="card-title">Convenience</h5>
+                            <p class="card-text">Process your payroll from anywhere at any time via the Internet.</p>
+                          </div>
+                        </div>
+                        </center>
+                </div>
+                <div class="col">
+                        <center>
+                        <div class="card" style="background-image: url('{% static 'images/design.jpg' %}'); background-repeat: no-repeat; background-position: center; background-size: 100%; width: 20rem; height: 20rem;">
+                          <center><img class="zoom" src="{% static 'images/growth.png' %}" alt="Card image cap" height="110px" width="110px" ></center>
+                          <div class="card-body">
+                            <h5 class="card-title">Room for growth</h5>
+                            <p class="card-text">More employees, more payrolls, same hassle-free service.</p>
+                          </div>
+                        </div>
+                        </center>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+
+        <footer class="container py-5">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <center><img src="{% static 'images/payroll_logo.png' %}" height="24" width="24"></img>
+                        <small class="d-block mb-3 text-muted">&copy; 2017-2018</small></center>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Features</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Cool stuff</a></li>
+                        <li><a class="text-muted" href="#">Random feature</a></li>
+                        <li><a class="text-muted" href="#">Team feature</a></li>
+                        <li><a class="text-muted" href="#">Stuff for developers</a></li>
+                        <li><a class="text-muted" href="#">Another one</a></li>
+                        <li><a class="text-muted" href="#">Last time</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Team</a></li>
+                        <li><a class="text-muted" href="#">Locations</a></li>
+                        <li><a class="text-muted" href="#">Privacy</a></li>
+                        <li><a class="text-muted" href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <!-- Icons -->
+        <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+        <script>
+         feather.replace()
+        </script>
+
+        <script>
+         Holder.addTheme('thumb', {
+             bg: '#55595c',
+             fg: '#eceeef',
+             text: 'Thumbnail'
+         });
+        </script>
+    </body>
+</html>

@@ -1,13 +1,97 @@
-{% extends 'payroll/base.html' %}
-{% load staticfiles %}
-
+{% extends 'payroll/user/base.html' %}
+{%include 'payroll/messages.html' %}
 {% block content %}
-    {% for record in emp %}
-        <div class="employee">
-            <p> <a href="{% url 'employee_detail' pk=record.pk %}">Name: {{ record.name }} </a> </p>
+
+<h1>Employee List</h1>
+
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_employee'  %}">Add Employee</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'employee_list'  %}" >View All Employee</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'admin_detail'  %}">Update Admin Profile</a>
+        </li>
+
+
+
+    </ul>
+</div>
+
+
+
+
+</div>
+
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
+    <div class="employee">
+
+        <div class="row">
+            {% for record in emp %}
+
+
+
+            <div class="col-md-4 border pb-5">
+                <p> <a href="{% url 'employee_detail' pk=record.pk %}">Name: {{ record.user.username }} </a><span></span>  </p>
                 <div class="image">
-                    <img src='{{record.profile_pic.url}}' class="img-circle" alt="Cinque Terre"alt="No image" height="25%" width="25%"border="5">
-                </div>
+                    <img src='{{record.profile_pic.url}}' class="image" alt="Cinque Terre"alt="No image" height="150" width="100%"border="5"></td></div>
+            </div>
+
+            {% endfor  %}
         </div>
-     {% endfor %}
+
+
+
+        <!-- <div class="table-responsive-sm">
+             <table class="table table-sm">
+
+
+             <thead>
+             <tr>
+             <th  class="text-center"> <strong ></strong></th>
+             <th  class="text-center"> <strong ></strong></th>
+
+
+             </tr>
+             </thead>
+
+
+
+
+             {% for record in emp %}
+             <tr><td>
+
+             <p> <a href="{% url 'employee_detail' pk=record.pk %}">Name: {{ record.user.username }} </a> </p>
+             <div class="image">
+             <img src='{{record.profile_pic.url}}' class="img-circle" alt="Cinque Terre"alt="No image" height="20%" width="20%"border="5"></td></div>
+
+
+             {% endfor %}
+
+             </tbody>
+             </table>
+             </div> -->
+
+
+    </div>
+</div>
+</div>
 {% endblock %}

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Payroll Dashboard Template for Bootstrap</title>
+
+    <style type="text/css">
+
+     @page {
+         size: A4;
+         @frame content_frame {
+             left: 40pt;
+             right:40pt;
+             width: 512pt;
+             top: 50pt;
+             height: 692pt;
+             -pdf-frame-border: 1;    /* for debugging the layout */
+         }
+     }
+
+     .row {
+         margin:15px
+
+
+     }
+
+     .wrapper {
+         display:grid;
+         grid-template-columns: 100px 100px 100px;
+         grid-gap: 10px;
+         padding: 10px;
+     }
+     .box {
+         padding: 0px;
+         font-size: 120%;
+     }
+
+
+    </style>
+    </head>
+    <body>
+
+        <div class="wrapper">
+            <table>
+                <tr>
+                    <td>
+                        <div class="box" align="left">
+                            <address>
+                                <strong>{{ salary.employee.company.name }}</strong>
+                                <br>
+                                {{ salary.employee.company.address_line_1 }}
+                                <br>
+                                {{ salary.employee.company.address_line_2 }}
+
+                                {{salary.employee.company.state }}
+                                <br><abbr title="Phone">Pin-Code:</abbr>
+                                {{ salary.employee.company.postal_code }}
+                                <br>
+                                {{ salary.employee.company.website }}
+                            </address>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="box" align="right">
+                            <img src="data:image/png;base64,{{encoded_string}}" width="30" height="30"  class="d-inline-block align-left"  alt="noimage">
+                            <h3>Payrollz</h3>
+                            <em> Date: {{ salary.date }}</em>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="wrapper">
+            <div class ="box" align="center">
+                <h4 style="font-weight:bold;font-size:150%">Pay Slip for {{ salary.date }}</h4>
+            </div>
+            <div class="box" >
+                <table style=" border:0; border-style:solid; border-color:black;padding:5px; font-size:100%">
+
+
+                    <tr>
+                        <td  style="width: 16.66%">Employee:</td>
+                        <td >{{ salary.employee }}</td>
+                        <td >Month:</td>
+                        <td >{{ salary.date }}</td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 16.66%">Department:</td>
+                        {% if dept %}
+
+                        <td >{{dept.department.get_department_display}}</td>
+                        {% else %}
+                        <td  >{{dept}}</td>
+                        {% endif  %}
+                        <td  >Total Days:</td>
+                        <td >{{ salary.total_days }}</td>
+
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Designation:</td>
+                        {% if desgn %}
+                        <td >{{desgn.designation.get_designation_display}}</td>
+                        {% else %}
+                        <td >{{desgn}}</td>
+                        {% endif %}
+                        <td  >Weekends & Public Holidays: </td>
+                        <td >{{ salary.weekend}}+{{salary.public_holidays }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Joining Date:</td>
+                        <td ">{{ salary.employee.joining_date }}</td>
+                        <td >Working Days:</td>
+                        <td >{{ salary.working_days }}</td>
+                    </tr>
+                    <tr>
+                        <td >Attendance:</td>
+                        <td >{{ salary.attendance }}</td>
+
+                    </tr>
+
+                </table>
+            </div>
+
+
+
+
+            <div class="box">
+
+                <table style=" border:0.5; border-style:solid; border-color:black;padding:5px; font-size:100%">
+
+                    <tr>
+                        <th colspan=2  class="text-left"> Allowance:</th>
+
+                        <th colspan=2 class="text-left"> Deduction:</th>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 16.66%">Basic:</td>
+                        <td>  {{salary.basic_amount }} </td>
+                        <td style="width:150">Proffessional Tax:</td>
+                        <td> {{ salary.proffessional_tax }} </td>
+                    </tr>
+                    <tr>
+                        <td  style="width: 16.66%">HRA:</td>
+                        <td>  {{salary.hra_amount }} </td>
+                        <td  style="width: 16.66%">Income Tax: </td>
+                        <td>  {{ salary.income_tax }} </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Conveyance Allowance:</td>
+                        <td>  {{salary.conveyance_allowance }} </td>
+                        <td rowspan=2 style="width: 16.66%">Loss of Pay:</td>
+                        <td rowspan=2> {{ salary.loss_of_pay }} </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Special Allowance:</td>
+                        <td>  {{salary.special_allowance }} </td>
+                    </tr>
+                    <tr style="font-weight:bold">
+                        <td style="width: 16.66%" >Gross Earnings:</td>
+                        <td > {{ salary.gross_earning }}  </td>
+                        <td style="width: 16.66%">Gross Deduction:</td>
+                        <td >{{ salary.gross_deduction }} </td>
+                    </tr>
+
+
+
+                </table>
+            </div>
+        </div>
+
+
+        <div class="wrapper">
+            <div class="box">
+                <table style=" border:1; border-style:solid; border-color:black;padding:5px; font-size:100%;font-weight:bold">
+                    <tr>
+                        <td>Net Salary:</td>
+                        <td>{{ salary.net_salary }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total amount in words:</td>
+                        <td>{{amount_words}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="box" align="center" style="padding-top:15px">
+                <p style="font-weight:bold"><em>Note: This is a computer generated pay slip hence does not require signature.</em></p>
+            </div>
+        </div>
+    </body>
+</html>

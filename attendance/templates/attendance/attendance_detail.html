@@ -1,0 +1,50 @@
+{% extends 'attendance/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1> Attendance Report</h1>
+</div>
+<div class="col-sm-7">
+    <!-- {% for message in messages %}
+         < <div class="alert alert-success">
+         <a class="close" href="#" data-dismiss="alert">×</a>
+
+         {{ message }}
+
+         </div>
+          {% endfor %}>
+       -->
+            <div class="table-responsive-sm">
+                <table class="table table-sm">
+                    <tr>
+                        <td style="width: 16.66%"><strong>Date</strong></td>
+                        <td><strong>Employee</strong></td>
+                        <td ><strong>Mark</strong></td>
+                        <td ><strong>leavetype<strong></td>
+                        <td ><strong>PL</strong></td>
+                        <td ><strong>CL</strong></td>
+
+                    </tr>
+
+                    {% for obj in records %}
+                    <tr>
+                        <td style="width: 16.66%">{{obj.date}}</td>
+                        <td>{{obj.employee}}</td>
+                        <td >{{obj.mark}}</td>
+                        {% ifequal obj.leave_type "" %}
+                             <td><p>None</p></td>
+                             {% else %}
+                        <td >{{obj.leave_type}}</td>
+                        {% endifequal %}
+                        <td >{{obj.remPrivilegeLeave}}</td>
+                        <td>{{obj.remCasualLeave}}</td>
+
+                    </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+
+
+
+            {% endblock  %}

@@ -1,0 +1,78 @@
+{% extends 'company/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+<h1>Company Profile</h1>
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+        <li class="nav-item">
+            <a class="nav-link  " href="{% url 'edit_company'  %}">Update Company</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_holiday'  %}">Holiday</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_department'  %}" >Department</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_designation'  %}">Designation</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_worktype'  %}">Work-Type</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_jobtype'  %}">Job-Type</a>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+
+<div class="row">
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+</div>
+</div>
+<div class="card border">
+    <div class="card-body">
+<div class="row m-auto">
+    <div class="col text-center">
+        <img src="{{company.logo.url}}" width="30" height="30" class="d-inline-block align-center" alt="">
+
+
+        <h4 class="card-header">{{company.name}}</h4>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <address class="card-text">
+        {{company.address_line_1}}
+       <br> {{company.address_line_2}}
+                {{company.state}}
+                  <br> <abbr title="Phone">Pin-Code:</abbr>
+                  {{company.postal_code}}
+
+                     <br> <abbr title="Phone">Fax:</abbr> {{company.fax}}
+                        <br>  {{company.website}}
+                          </address>
+    </div>
+    <div class="col">
+    </div>
+</div>
+    </div>
+    </div>
+{% endblock  %}

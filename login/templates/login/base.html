@@ -1,0 +1,106 @@
+<!doctype html>
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Payroll</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href={% static 'dist/css/bootstrap.min.css' %} rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href={% static 'css/app.css' %} rel="stylesheet">
+  </head>
+
+  <body>
+      <nav class="navbar navbar-dark  bg-dark flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Payrollz</a>
+
+      <!--input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search" -->
+<ul class=list-inline>
+      <li class="list-inline-item">
+
+                {%include 'login/messages.html' %}
+        </li>
+
+        <li class="list-inline-item">
+        <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="#">Sign up</a>
+        </li></ul>
+        </li>
+      </ul>
+    </nav>
+
+
+
+
+
+
+
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-sm-12">
+            <div class="row">
+                <div class="col-6">
+                    <h1 class="logo">
+                        <a href="#">
+
+                            Sign Up
+                            {% if user.is_authenticated %}
+                            {% if user.is_teacher %}
+                            <span class="icon-feather" data-toggle="tooltip" data-placement="right" title="Teacher profile"></span>
+                            {% else %}
+                            <span class="icon-graduation-cap" data-toggle="tooltip" data-placement="right" title="Student profile"></span>
+                            {% endif %}
+                            {% endif %}
+                        </a>
+                    </h1>
+                </div>
+                <div class="col-6 text-right">
+                    {% if user.is_authenticated %}
+                    <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. <a href="{% url 'logout' %}">Log out</a>.</p>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-light" role="button">Log in</a>
+                    <!-- <a href="{% url 'signup' %}" class="btn btn-primary" role="button">Sign up</a> -->
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    {% for message in messages %}
+                    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>
+            <footer>
+                <a href="#">© 2017-2018</a>
+
+            </footer>
+  </body>
+  </html>

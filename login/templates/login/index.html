@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Floating labels example for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="floating-labels.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <form class="form-signin">
+      <div class="text-center mb-4">
+        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Floating labels</h1>
+        <p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a href="https://caniuse.com/#feat=css-placeholder-shown">Works in latest Chrome, Safari, and Firefox.</a></p>
+      </div>
+
+
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ company.errors }}
+                    {{ company.non_field_errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ company.name.errors }}
+                    {{ company.name.label_tag }}
+                    {{ company.name }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ company.address_line_1.errors }}
+                    {{ company.address_line_1.label_tag }}
+                    {{ company.address_line_1 }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ company.address_line_2.errors }}
+                    {{ company.address_line_2.label_tag }}
+                    {{ company.address_line_2 }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ company.state.errors }}
+                    {{ company.state.label_tag }}
+                    {{ company.state }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ company.postal_code.errors }}
+                    {{ company.postal_code.label_tag }}
+                    {{ company.postal_code }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ company.country.errors }}
+                    {{ company.country.label_tag }}
+                    {{ company.country }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ company.fax.errors }}
+                    {{ company.fax.label_tag }}
+                    {{ company.fax }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    {{ company.website.errors }}
+                    {{ company.website.label_tag }}
+                    {{ company.website }}
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ company.country.errors }}
+                    {{ company.country.label_tag }}
+                    {{ form.country }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.fax.errors }}
+                    {{ form.fax.label_tag }}
+                    {{ form.fax }}
+                </div>
+            </div>
+            <div
+<button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Submit</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- <div class="form-label-group">
+           <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+           <label for="inputEmail">Email address</label>
+           </div>
+
+           <div class="form-label-group">
+           <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+           <label for="inputPassword">Password</label>
+           </div>
+
+           <div class="checkbox mb-3">
+           <label>
+           <input type="checkbox" value="remember-me"> Remember me
+           </label>
+           </div>
+           <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button> -->
+      <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+    </form>
+  </body>
+</html>

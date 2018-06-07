@@ -1,10 +1,234 @@
-{% extends 'payroll/base.html' %}
+{% extends 'payroll/user/base.html' %}
+{%include 'payroll/messages.html' %}
 {% block content %}
 
-<div class="employee">
-    <a class="btn btn-default" href="{% url 'employee_edit' pk=employee.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-    <h1>{{ employee.name }}</h1>
-    <p>{{ employee.address}} </p>
-    <p>{{employee.contact}}</p>
+{% if employee.is_admin == True  %}
+<h1>Admin Profile</h1>
+{% else %}
+<h1>Employee Profile</h1>
+{% endif %}
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'add_employee'  %}">Add Employee</a>
+     </li>
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'employee_list'  %}" >View All Employee</a>
+     </li>
+
+     <li class="nav-item">
+     <a class="nav-link active" href="{% url 'admin_detail'  %}">Update Admin Profile</a>
+     </li>
+
+
+
+     </ul>
+     </div>
+
+
+
+
+
+
+</div>
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+</div>
+
+    <div class="row border-bottom mb-md-2 ">
+        <div class="col">
+            <img  src="{{ employee.profile_pic.url  }}" width=150px height=150px>
+            <p><h4>Name: {{employee.user.username}}</h></p>
+
         </div>
-{% endblock %}
+        <div class="col">
+            <div class="form-group text-left">
+                <!-- <img  src="{{ employee.profile_pic.url  }}" width=150px height=150px> -->
+            </div>
+        </div>
+        <!-- <div class="col"> --> <!-- <a class="btn btn-default" href="{% url 'employee_edit' pk=employee.pk %}">Edit</a><span class="glyphicon glyphicon-pencil"></span></a> -->
+
+
+        <div class="col">
+            <div class="form-group text-left">
+
+                <div class="dropdown">
+                    <Button type="button"  id="dropdown-toggle" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">Action</Button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item"  href={% url 'employee_edit' pk=employee.pk  %}>Edit</a>
+                        <a class="dropdown-item" href="{% url 'mark_attendance' pk=employee.pk  %}">Attendance</a>
+                        <a class="dropdown-item" href="{% url 'update_salary' pk=employee.pk  %}">Update Salary</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-light border" role="alert"><h6>Personal Details :</h6></div>
+    <div class= "row">
+
+        <div class="col border ">
+            <div class="table-responsive-sm">
+                <table class="table table-md">
+                    <tr>
+                        <td style="width: 16.66%">Address:</td>
+                        <td >
+                            <address>
+                                {{employee.address }}
+                            </address>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Contact:</td>
+                        <td>{{employee.contact}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Alternate Contact:</td>
+                        <td>{{employee.alter_Contact}}</td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 16.66%">Email ID:</td>
+                        <td>{{employee.emailid}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Office Email ID:</td>
+                        <td>{{employee.office_emailid}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Gender:</td>
+                        <td>{{employee.get_gender_display}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Date-Of-Birth:</td>
+                        <td>{{employee.Dob}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Joining Date:</td>
+                        <td>{{employee.joining_date}}</td>
+                    </tr>
+
+                    <table>
+            </div>
+        </div>
+
+
+
+    <div class="alert alert-light border" role="alert"><h6>Job Profile :</h6></div>
+
+    <!-- <div class= "row p-2"> -->
+
+        <div class="col border">
+            <div class="table-responsive-sm">
+                <table class="table table-md">
+                    <tr>
+                        <td style="width: 16.66%">Designation:</td>
+                        {% if desgn == None %}
+                        <td>
+
+                                <strong class="text-danger font-italic">Designation not added</strong>
+
+                        </td>
+                        {% else%}
+                        <td>
+
+                                {{desgn.designation.get_designation_display }}
+
+                        </td>
+                        {% endif %}
+
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Department:</td>
+                        {% if dept == None %}
+                        <td>
+
+                                <strong class="text-danger font-italic">Department not added</strong>
+
+                        </td>
+                        {% else %}
+                        <td>{{dept.department.get_department_display}}</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td style="width: 16.66%">Job-Type:</td>
+                        {% if jobtype == None %}
+                        <td>
+
+                                <strong class="text-danger font-italic">Job-Type not added</strong>
+
+                        </td>
+                        {% else %}
+
+                        <td>{{jobtype.job_type.get_jobtype_display}}</td>
+                        {% endif %}
+                    </tr>
+
+
+                    <tr>
+                        <td style="width: 16.66%">Salary:</td>
+                        <td>{{employee.salary}}</td>
+                    </tr>
+
+                    <table>
+            </div>
+        </div>
+
+        <div class="alert alert-light border" role="alert"><h6>Salary Structure :</h6></div>
+
+            <div class="col border">
+{% if salary == None %}
+                <strong class="text-danger font-italic">Salary structure not added</strong>
+                {% else %}
+
+            <div class="table-responsive-sm">
+                <table class="table table-md">
+                    <tr>
+                        <td colspan=2 style="width: 16.66%"><strong>Allowance:</strong></td>
+                        <td colspan=2 style="width: 16.66%"><strong>Deduction:</strong></td>
+
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Basic Percentage</td>
+                        <td>{{salary.basic_percentage}}</td>
+                        <td style="width: 16.66%">Professional Tax</td>
+                        <td>{{salary.proffessional_tax}}</td>
+                    </tr>
+
+                                     <tr>
+                        <td style="width: 16.66%">Hra Percentage</td>
+                        <td>{{salary.hra_percentage}}</td>
+                        <td style="width: 16.66%">Income Tax</td>
+                        <td>{{salary.income_tax}}</td>
+                                     </tr>
+                                      <tr>
+                        <td style="width: 16.66%">Conveyance Allowance</td>
+                        <td>{{salary.conveyance_allowance}}</td>
+
+                                      </tr>
+                                                    <tr>
+                        <td style="width: 16.66%">Special Allowance</td>
+                        <td>{{salary.special_allowance}}</td>
+
+                    </tr>
+    </div>
+
+{% endif %}
+
+            </div>
+
+    {% endblock  %}

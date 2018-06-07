@@ -1,0 +1,252 @@
+{% extends 'login/base.html'  %}
+{% block content %}
+
+<form method="POST" class="employee-form">{% csrf_token %}
+
+
+
+    <div class ="row justify-content-center">
+        <!--div class="col"-->
+        <div class="form-group">
+            <div class="alert alert-light m-auto" role="alert">Company Detail :</div>
+            <!--label for="id_deductions" style=" font-size: 1rem;">Deduction :</label-->
+            <!--/div--></div></div>
+
+
+            <!-- <div class="row">
+                 <div class="col">
+                 <div class="form-group">
+
+                 {{companyform.as_p}}
+
+
+                 </div>
+                 </div>
+                 </div> -->
+
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.errors }}
+                        {{ companyform.non_field_errors }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.name.errors }}
+                        {{ companyform.name.label_tag }}
+                        {{ companyform.name }}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.logo.errors }}
+                        {{ companyform.logo.label_tag }}
+                        {{ companyform.logo }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.address_line_1.errors }}
+                        {{ companyform.address_line_1.label_tag }}
+                        {{ companyform.address_line_1 }}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.address_line_2.errors }}
+                        {{ companyform.address_line_2.label_tag }}
+                        {{ companyform.address_line_2 }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.state.errors }}
+                        {{ companyform.state.label_tag }}
+                        {{ companyform.state }}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.postal_code.errors }}
+                        {{ companyform.postal_code.label_tag }}
+                        {{ companyform.postal_code }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.country.errors }}
+                        {{ companyform.country.label_tag }}
+                        {{companyform.country }}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.fax.errors }}
+                        {{ companyform.fax.label_tag }}
+                        {{ companyform.fax }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        {{ companyform.website.errors }}
+                        {{ companyform.website.label_tag }}
+                        {{ companyform.website }}
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class ="row justify-content-center">
+                <!--div class="col"-->
+                <div class="form-group">
+                    <div class="alert alert-light m-auto" role="alert">Admin :</div>
+                    <!--label for="id_deductions" style=" font-size: 1rem;">Deduction :</label-->
+                    <!--/div--></div></div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{ userform.username.errors }}
+                                {{ userform.username.label_tag }}
+                                {{ userform.username }}
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                {{ userform.password1.errors }}
+                                {{ userform.password1.label_tag }}
+                                {{ userform.password1 }}
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                {{ userform.password2.errors }}
+                                {{ userform.password2.label_tag }}
+                                {{ userform.password2 }}
+
+
+                            </div>
+                        </div>
+                    </div>
+
+            <div class ="row justify-content-center">
+                <!--div class="col"-->
+                <div class="form-group">
+                    <div class="alert alert-light m-auto" role="alert">Admin Personal Detail :</div>
+                    <!--label for="id_deductions" style=" font-size: 1rem;">Deduction :</label-->
+                    <!--/div--></div></div>
+
+
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.address.errors }}-->
+                                {{ employeeform.address.label_tag }}
+                                {{ employeeform.address}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.profile_pic.errors }}-->
+                                {{ employeeform.profile_pic.label_tag }}
+                                {{ employeeform.profile_pic}}
+                                                </div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <!--{{ form.contact.errors }}-->
+                                {{ employeeform.contact.label_tag }}
+                                {{ employeeform.contact}}
+                            </div>
+                        </div>
+
+
+
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.alter_Contact.errors }}-->
+                                {{ employeeform.alter_Contact.label_tag }}
+                                {{ employeeform.alter_Contact}}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.Dob.errors }}-->
+                                {{ employeeform.Dob.label_tag }}
+                                {{ employeeform.Dob}}
+                            </div>
+                        </div>
+
+
+
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.emailid.errors }}-->
+                                {{ employeeform.emailid.label_tag }}
+                                {{ employeeform.emailid}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.gender.errors }}-->
+                                {{ employeeform.gender.label_tag }}
+                                {{ employeeform.gender}}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.joining_date.errors }}-->
+                                {{ employeeform.joining_date.label_tag }}
+                                {{employeeform.joining_date}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <!-- {{ form.salary.errors }}-->
+                                {{employeeform.salary.label_tag }}
+                                {{ employeeform.salary}}
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                    </div>
+
+ <div class ="row justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-md" name="btnCompany">Submit</button></div>
+</form>
+
+
+
+
+
+
+                    {% endblock %}

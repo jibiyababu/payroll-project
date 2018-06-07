@@ -1,0 +1,162 @@
+{% extends 'attendance/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1>Mark Attendance</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'view_attendance'  %}">View Attendance</a>
+     </li>
+
+     <li class="nav-item">
+     <a class="nav-link" href="{% url 'view_attendance_company'  %}">View Attendance Company</a>
+     </li>
+    </ul>
+    </div>
+
+</div>
+
+
+
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
+
+
+
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.employee.errors }}
+                    {{ form.employee.label_tag }}
+                    {{ form.employee }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.date.errors }}
+                    {{ form.date.label_tag }}
+                    {{ form.date }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col">
+                <div class="form-group">
+                    {{ form.mark.errors }}
+                    {{ form.mark.label_tag }}
+                    {{ form.mark }}
+                </div>
+        </div>
+
+
+        <div class="col">
+                <div class="form-group">
+                    {{ form.work_type.errors }}
+                    {{ form.work_type.label_tag }}
+                    {{ form.work_type }}
+                </div>
+        </div>
+        </div>
+
+        <div class ="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <div id="leave_type">
+                        {{ form.leave_type.errors }}
+                        {{ form.leave_type.label_tag }}
+                        {{ form.leave_type }}
+                    </div>
+                </div>
+            </div>
+        </div>
+<button type="submit" class="btn btn-primary btn-sm" name="btnAttendance">Mark</button>
+
+</form>
+
+<!-- <div class="mt-5 "> -->
+
+{% if record %}
+<div class="row">
+    <div class="col mt-5">
+
+        <!-- <div id="table-scroll" class="table-scroll mt-5">
+             <div class="table-wrap">
+             <!--table class="main-table"-->
+
+        <!--table  class=" main-table table table-md table-responsive table-wrap" > -->
+                    <div class="table-responsive-sm">
+                <table class="table table-sm table-striped" style="border-collapse:separate">
+                <thead class="thead-dark">
+                    <tr>
+
+
+                        <th class="fixed-side" scope="col">Employee</th>
+                        <!-- <th  scope="col">Department</th>
+                             <th  scope="col">Designation</th>
+                             <th  scope="col">Job-Type</th> -->
+                        <th  scope="col">Mark</th>
+
+                        <th  scope="col">Leave-Type</th>
+
+                        <th  scope="col">PL</th>
+                        <th  scope="col">CL</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for attendance in record %}
+                    <tr>
+                        <td><a class="fixed-side text-info font-weight-bold " href="{% url 'employee_detail' pk=attendance.employee_id  %}">{{attendance.employee.user.username}}</a></td>
+                        <!-- <td></td>
+                             <td></td>
+                             <td></td> -->
+                        <td>{{attendance.mark}}</td>
+                        {%if attendance.leave_type%}
+                        <td>{{attendance.leave_type}}</td>
+                        {%else%}
+                        <td>None</td>
+                        {% endif%}
+                        <td>{{attendance.remPrivilegeLeave}}</td>
+                        <td>{{attendance.remCasualLeave}}</td>
+                    </tr>
+                    {% endfor  %}
+
+                </tbody>
+            </table>
+    </div>
+</div>
+    </div>
+
+{%else%}
+<h6 class="alert-info text-center">No attendance has been marked for today.</h6>
+{%endif%}
+
+
+
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'payroll/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1> Salary Report</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            {% if not pk  %}
+
+            <a class=" btn btn-light btn-sm" href="{% url 'update_salary' %}">
+                {% else  %}
+                <a class=" btn btn-light btn-sm" href="{% url 'update_salary' pk=pk %}">
+                {% endif %}
+                <span class="glyphicon glyphicon-plus"></span>Update Salary Structure
+            </a>
+        </li>
+
+        <li class="nav-item">
+
+            <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="active btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+
+</div>
+<div class="col-sm-7">
+    <!-- {% for message in messages %}
+         < <div class="alert alert-success">
+         <a class="close" href="#" data-dismiss="alert">×</a>
+
+         {{ message }}
+
+         </div>
+         {% endfor %}>
+       -->
+    </div>
+    {% if records %}
+    <div id="table-scroll" class="table-scroll">
+         <div class="table-wrap">
+    <div class="table-responsive-sm">
+        <table class="  main-table table table-sm table-striped">
+            <thead class="thead-dark">
+
+                <tr>
+                    <td style="width: 16.66%"><strong>Date</strong></td>
+                    <td><strong>Employee</strong></td>
+                    <td ><strong>Basic Percentage</strong></td>
+                    <td ><strong>Basic Amount<strong></td>
+                        <td ><strong>Hra Percentage</strong></td>
+                        <td ><strong>Hra Amount</strong></td>
+                        <td ><strong>Conveyance Allowance</strong></td>
+                        <td ><strong>Special Allowance</strong></td>
+                        <td ><strong>Proffessional Tax</strong></td>
+                        <td ><strong>Income Tax</strong></td>
+                        <td ><strong>Loss Of Pay</strong></td>
+                        <td ><strong>Gross Earning</strong></td>
+                        <td ><strong>Gross Deduction</strong></td>
+                        <td ><strong>Net Salary</strong></td>
+                        <td class="fixed-side"><strong>Payslip</strong></td>
+                </tr>
+</thead>
+<tbody>
+
+
+
+
+
+
+
+
+
+                    {% for obj in records %}
+            <tr>
+                <td style="width: 16.66%">{{obj.date}}</td>
+                <td>{{obj.employee}}</td>
+                <td >{{obj.basic_percentage}}</td>
+                <td >{{obj.basic_amount}}</td>
+                <td >{{obj.hra_percentage}}</td>
+                <td >{{obj.hra_amount}}</td>
+                <td >{{obj.conveyance_allowance}}</td>
+                <td >{{obj.special_allowance}}</td>
+                <td >{{obj.proffessional_tax}}</td>
+                <td >{{obj.income_tax}}</td>
+                <td >{{obj.loss_of_pay}}</td>
+                <td >{{obj.gross_earning}}</td>
+                <td >{{obj.gross_deduction}}</td>
+                <td >{{obj.net_salary}}</td>
+                <td><a class="text-info font-weight-bold" href="{% url 'salary_slip' pk=obj.pk %}">View</a></td>
+
+            </tr>
+                </tbody>
+
+ {% endfor %}
+                </table>
+    </div>
+         </div>
+         </div>
+
+            {% else %}
+            <div class="m-auto">
+                <h6 class="alert-info text-center">No records to show.</h6>
+                </div>
+            {% endif%}
+            {% endblock  %}

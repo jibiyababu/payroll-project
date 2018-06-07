@@ -1,0 +1,47 @@
+{% extends 'attendance/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1>Mark Attendance</h1>
+
+
+</div>
+
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
+    <form method="POST" class="employee-form">{% csrf_token %}
+        <div class="row">
+            <div class="col">
+                {{form.as_p}}
+                <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Submit</button>
+
+            </div>
+            <div class="col">
+                <h6><strong>Leave Balance:</strong><h6>
+                <div class="table-responsive-sm border">
+                    <table class="table table-sm">
+                        <tr class="table-active">
+                            <td ><strong>PL</strong></td>
+                            <td ><strong>CL</strong></td>
+
+                        </tr>
+                        <tr class="table">
+                            <td>{{leave.remPrivilegeLeave}}</td>
+                            <td>{{leave.remCasualLeave}}</td>
+                        </tr>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        {% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'payroll/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+<h1>Update Salary Structure</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            {% if not pk  %}
+
+            <a class="active btn btn-light btn-sm" href="{% url 'update_salary' %}">
+                {% else  %}
+                <a class="active btn btn-light btn-sm" href="{% url 'update_salary' pk=pk %}">
+                {% endif %}
+                <span class="glyphicon glyphicon-plus"></span>Update Salary Structure
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class=" btn btn-light btn-sm" href="{% url 'salary_pending_list'  %}">Pending Salary
+            </a>
+        </li>
+
+        <li class="nav-item">
+
+            <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+</div>
+
+
+
+<div class="col-sm-7">
+    <form method="POST" class="salary_update_structure-form">{% csrf_token %}
+        <div class="row">
+            <div class="col">
+                <div class="employee form-group">
+                    {{ form.employee.errors }}
+                    {{ form.employee.label_tag }}
+                    {{ form.employee }}
+                    <!-- <p><label for="id_name" style=" font-size: 1rem;">Employee Name:</label>
+                         <select name="Employee Name" id="id_name" class="form-control" placeholder="Select">
+                         <option value="John">...</option>
+                         <option value="Farhan" selected>...</option>
+                         </select> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    {{ form.date.errors }}
+                    {{ form.date.label_tag }}
+                    {{ form.date }}
+                </div>
+            </div>
+        </div>
+        <div class ="row justify-content-center  m-auto">
+            <!--div class="col"-->
+            <div class="form-group">
+                <div class="alert alert-light" role="alert">Allowance :</div>
+                <!--label for="id_Allowance" style=" font-size: 1rem;">Allowance :</label-->
+                <!--/div--></div></div>
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{ form.basic_percentage.errors }}
+                            {{ form.basic_percentage.label_tag }}
+                            {{ form.basic_percentage }}
+                            <!-- <p><label for="id_basic">Basic Percentage:</label>
+                                 <input type="number" name="basic" value="35%" required maxlength="255" id="id_basic" class="form-control"/>
+                                 </p> -->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{ form.hra_percentage.errors }}
+                            {{ form.hra_percentage.label_tag }}
+                            {{ form.hra_percentage }}
+                            <!-- <p><label for="id_hra">Hra Percentage :</label>
+                                 <input type="number" name="hra" value="40%" required maxlength="255" id="id_hra" class="form-control"/>
+                                 </p> -->
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{ form.conveyance_allowance.errors }}
+                            {{ form.conveyance_allowance.label_tag }}
+                            {{ form.conveyance_allowance }}
+                            <!-- <p><label for="id_Conveyance">Conveyance Allowance:</label>
+                                 <input type="number" name="conveyanace" value="1400" required maxlength="255" id="id_Conveyance" class="form-control"/>
+                                 </p> -->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{ form.special_allowance.errors }}
+                            {{ form.special_allowance.label_tag }}
+                            {{ form.special_allowance }}
+                            <!-- <p><label for="id_Special_allow">Special Allowance:</label>
+                                 <input type="number" name="special_allow" value="0" required maxlength="255" id="id_Special_allow" class="form-control"/>
+                                 </p> -->
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class ="row justify-content-center">
+                    <!--div class="col"-->
+                    <div class="form-group">
+                        <div class="alert alert-light m-auto" role="alert">Deduction :</div>
+                        <!--label for="id_deductions" style=" font-size: 1rem;">Deduction :</label-->
+                        <!--/div--></div></div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    {{ form.proffessional_tax.errors }}
+                                    {{ form.proffessional_tax.label_tag }}
+                                    {{ form.proffessional_tax }}
+                                    <!-- <p><label for="id_professional_tax">Professional Tax:</label>
+                                         <input type="number" name="professional_tax" value="200" required maxlength="255" id="id_professional_tax" class="form-control"/>
+                                         </p> -->
+                                </div></div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        {{ form.income_tax.errors }}
+                                        {{ form.income_tax.label_tag }}
+                                        {{ form.income_tax }}
+                                        <!-- <p><label for="id_income_tax">Income Tax:</label>
+                                             <input type="number" name="income_tax" value="0" required maxlength="255" id="id_income_tax" class="form-control"/>
+                                             </p> -->
+                                    </div>
+                                </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-md">Update Salary Structure</button>
+
+
+
+<script>
+ $(id_employee).change( function () {
+     // Generate URL without "id" bit
+     var url = "{% url 'update_salary' %}";
+
+     /* var id = $(this).attr('employee');*/
+     var id= document.getElementById('id_employee').value
+     //window.alert('hello')
+     // Construct the full URL with "id"
+     document.location.href = url + id;
+ });
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'company/base.html' %}
+{%include 'login/messages.html' %}
+{% block content %}
+
+<h1>Work-Type Details</h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'edit_company'  %}">Company</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_holiday'  %}">Holiday</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_department'  %}">Department</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_designation'  %}">Designation</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'add_worktype'  %}">Work-Type</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " href="{% url 'add_jobtype'  %}">Job-Type</a>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+
+<table class="table ">
+    <thead class="thead-dark">
+        <tr>
+
+            <th scope="col">WorkType</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for record in worktype %}
+
+
+
+            <td>{{record.get_worktype_display}}</td>
+            <td><a class="btn btn-light"
+                   href= "{% url 'worktype_delete' pk=record.pk  %}">Delete</a></td>
+        </tr>
+        <tbody>
+            {% endfor %}
+</table>
+
+
+
+
+
+
+{% endblock %}

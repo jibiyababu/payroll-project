@@ -1,0 +1,13 @@
+{% extends 'payroll/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    {% for record in emp %}
+        <div class="employee">
+            <p> <a href="{% url 'employee_detail' pk=record.pk %}">Name: {{ record.name }} </a> </p>
+                <div class="image">
+                    <img src='{{record.profile_pic.url}}' class="img-circle" alt="Cinque Terre"alt="No image" height="25%" width="25%"border="5">
+                </div>
+        </div>
+     {% endfor %}
+{% endblock %}

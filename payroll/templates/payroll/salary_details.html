@@ -1,0 +1,206 @@
+{% extends 'payroll/base.html' %}
+{%include 'login/messages.html' %}
+
+{% block content %}
+<h1> Salary Details  </h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+
+            <a class="active btn btn-light btn-sm" href="{% url 'update_salary' pk=pk  %}">
+                <span class="glyphicon glyphicon-plus"></span>Update Salary Structure
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class=" btn btn-light btn-sm" href="{% url 'salary_pending_list'  %}">Pending Salary
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+
+            <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+</div>
+
+
+<div class="col-sm-7">
+        {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
+    <form method="POST" class="employee-form">{% csrf_token %}
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-6">
+                <div class="form-group">
+
+                    {{ form.month_year.errors}}
+                    {{ form.month_year.label_tag }}
+                    {{ form.month_year }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    {{ form.employee.errors }}
+                    {{ form.employee.label_tag }}
+                    {{ form.employee }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <!-- <div class="col">
+                 <div class="form-group">
+                 {{ emp_form.salary.errors }}
+                 {{ emp_form.salary.label_tag }}
+                 {{ emp_form.salary}}
+                 </div>
+                 </div> -->
+        </div>
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.basic_percentage.errors }}
+                    {{ form.basic_percentage.label_tag }}
+                    {{ form.basic_percentage }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.hra_percentage.errors }}
+                    {{ form.hra_percentage.label_tag }}
+                    {{ form.hra_percentage }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.basic_amount.errors }}
+                    {{ form.basic_amount.label_tag }}
+                    {{ form.basic_amount }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    {{ form.hra_amount.errors }}
+                    {{ form.hra_amount.label_tag }}
+                    {{ form.hra_amount }}
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col">
+             <div class="form-group">
+             <label for="id_hra_amount">HRA Amount:</label>
+             <input type="text" name="hra_amount" value="" required maxlength="255" id="id_hra_amount" class="form-control"/>
+             </div>
+             </div>
+             </div> -->
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.conveyance_allowance.errors }}
+                    {{ form.conveyance_allowance.label_tag }}
+                    {{ form.conveyance_allowance }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.special_allowance.errors }}
+                    {{ form.special_allowance.label_tag }}
+                    {{ form.special_allowance }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.proffessional_tax.errors }}
+                    {{ form.proffessional_tax.label_tag }}
+                    {{ form.proffessional_tax }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.income_tax.errors }}
+                    {{ form.income_tax.label_tag }}
+                    {{ form.income_tax }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.loss_of_pay.errors }}
+                    {{ form.loss_of_pay.label_tag }}
+                    {{ form.loss_of_pay }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.gross_earning.errors }}
+                    {{ form.gross_earning.label_tag }}
+                    {{ form.gross_earning }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form.gross_deduction.errors }}
+                    {{ form.gross_deduction.label_tag }}
+                    {{ form.gross_deduction }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    {{ form.net_salary.errors }}
+                    {{ form.net_salary.label_tag }}
+                    {{ form.net_salary }}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-md">Generate Salary Slip</button>
+
+        {% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'payroll/base.html' %}
+
+
+{% block content %}
+<h1> Salary Slip  </h1>
+<div class="btn-toolbar mb-2 mb-md-0">
+    <a class="btn btn-primary btn-sm" href="update_salary_structure.html">
+        <span class="glyphicon glyphicon-plus"></span>Update Salary Structure</a>
+</div>
+
+</div>
+<div class="col-sm-7">
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.employee.errors }}-->
+                    {{ form.employee.label_tag }}
+                    {{ salary.employee }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.date.errors }}-->
+                    {{ form.date.label_tag }}
+                    {{ salary.date }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.basicPercentage.errors }} -->
+                    {{ form.basic_percentage.label_tag }}
+                    {{ salary.basic_percentage }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.hraPercentage.errors }} -->
+                    {{ form.hra_percentage.label_tag }}
+                    {{ salary.hra_percentage }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.basicPercentage.errors }} -->
+                    {{ form.basic_percentage.label_tag }}
+                    {{ salary.basic_percentage }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.hraPercentage.errors }} -->
+                    {{ form.hra_percentage.label_tag }}
+                    {{ salary.hra_percentage }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.conveyanceAllowance.errors }} -->
+                    {{ form.basic_amount.label_tag }}
+                    {{ salary.basic_amount }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.specialAllowance.errors }} -->
+                    {{ form.hra_amount.label_tag }}
+                    {{ salary.hra_amount }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.proffesionalTax.errors }} -->
+                    {{ form.proffessional_tax.label_tag }}
+                    {{ salary.proffessional_tax }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.incomeTax.errors }} -->
+                    {{ form.income_tax.label_tag }}
+                    {{ salary.income_tax }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.lossOfPay.errors }} -->
+                    {{ form.loss_of_pay.label_tag }}
+                    {{ salary.loss_of_pay }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.grossEarning.errors }} -->
+                    {{ form.gross_earning.label_tag }}
+                    {{ salary.gross_earning }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.grossDeduction.errors }} -->
+                    {{ form.gross_deduction.label_tag }}
+                    {{ salary.gross_deduction }}
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <!-- {{ form.net_salary.errors }} -->
+                    {{ form.net_salary.label_tag }}
+                    {{ salary.net_salary }}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-md">Print</button>
+
+        {% endblock %}

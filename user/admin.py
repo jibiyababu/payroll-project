@@ -7,5 +7,8 @@ from .models import Leave_History
 from .models import Salary_History
 # Register your models here.
 admin.site.register(Employee)
- 
+admin.site.register(Designation_History)
+admin.site.register(Department_History)
+admin.site.register(Job_Type_History)
+admin.site.register(Salary_History)
  
