@@ -48,7 +48,7 @@
     {% endfor %}
 
 
-    <form method="POST" class="employee-form">{% csrf_token %}
+    <form method="POST" enctype="multipart/form-data" class="employee-form">{% csrf_token %}
 
         <div class="row">
             <div class="col">
@@ -61,11 +61,18 @@
         </div>
 
         <div class="row">
-            <div class="col">
+            <div class="col-12">
                 <div class="form-group">
                     {{ form.name.errors }}
                     {{ form.name.label_tag }}
                     {{ form.name }}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form.logo.errors }}
+                    {{ form.logo.label_tag }}
+                    {{ form.logo }}
                 </div>
             </div>
 
@@ -133,5 +140,5 @@
         </div>
 <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Update</button>
 
-<a class="btn btn-primary btn-sm" href="{% url 'add_holiday'  %}">Add Holiday</a>
+
         {% endblock %}

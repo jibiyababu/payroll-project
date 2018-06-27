@@ -3,21 +3,21 @@ from company.models import Designation, Department
 from company.models import Job_Type
 from .models import Employee,Salary_History
 from .models import Designation_History,Department_History
-from .models import Job_Type_History
+from .models import Job_Type_History,Salary_Increment
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class DateInput(forms.DateInput):
     input_type = 'date'
 class EmployeeForm(forms.ModelForm):
-
+    
     class Meta:
         model = Employee
-        fields = ('profile_pic','address','emailid','office_emailid','Dob','gender','contact', 'alter_Contact','joining_date', 'salary')
+        fields = ('name','profile_pic','address','emailid','office_emailid','Dob','gender','contact', 'alter_Contact','joining_date')
              
         
         widgets = {
-            
+            'name':forms.TextInput(attrs={'class': 'form-control','placeholder':'Name'}),
             'address':forms.TextInput(attrs={'class': 'form-control','placeholder':'Address'}),
             'Dob':DateInput(attrs={'class': 'form-control','placeholder':'DOB'}),
             'contact':forms.TextInput(attrs={'class': 'form-control','placeholder':'Contact'}),
@@ -25,12 +25,37 @@ class EmployeeForm(forms.ModelForm):
             'emailid':forms.EmailInput(attrs={'class': 'form-control','placeholder':'Email-ID'}),
             'office_emailid':forms.EmailInput(attrs={'class': 'form-control','placeholder':'Office Email-ID'}),
             'gender':forms.Select(attrs={'class': 'form-control','placeholder':'Gender'}),
-            'profile_pic':forms.FileInput(attrs={'class': 'form-control','placeholder':'Profile Picture'}),
+            'profile_pic':forms.ClearableFileInput(attrs={'class': 'form-control','placeholder':'Profile Picture'}),
             'joining_date':DateInput(attrs={'class': 'form-control','placeholder':'Joining Date'}),
-            'salary':forms.NumberInput(attrs={'class': 'form-control','placeholder':'Name'})
+            'user':forms.Select(attrs={'class': 'form-control'})
 
 }
+        labels = {
+                        'emailid': 'Email Address',
+                    }
+        
+        def __init__(self, *args, **kwargs):
+            super(EmployeeForm, self).__init__(*args, **kwargs)
+            #self.fields['profile_pic'].required=False
 
+class SalaryIncrementForm(forms.ModelForm):
+    class Meta:
+        
+        model = Salary_Increment
+        fields = ('employee','effective_from','salary')
+
+        widgets = {
+                    'employee':forms.Select(attrs={'class': 'form-control'}),
+                    'effective_from':DateInput(attrs={'class': 'form-control','placeholder':'Joining Date'}),
+                    'salary':forms.NumberInput(attrs={'class': 'form-control'})
+            
+                  }
+    
+    def __init__(self, *args, **kwargs):
+        company_id=kwargs.pop('company',False)
+        super(SalaryIncrementForm, self).__init__(*args, **kwargs)
+        if company_id:
+            self.fields['employee'] = forms.ModelChoiceField(queryset=Employee.objects.filter(company=company_id), widget=forms.Select(attrs={'class':'form-control'}))
 
 class DesignationForm(forms.ModelForm):
     class Meta:
@@ -102,7 +127,7 @@ class JobTypeForm(forms.ModelForm):
 class SalaryForm(forms.ModelForm):
       class Meta:
         model = Salary_History
-        fields = ('basic_percentage','hra_percentage','conveyance_allowance','special_allowance','proffessional_tax','income_tax')
+        fields = ('basic_percentage','hra_percentage','conveyance_allowance','proffessional_tax','income_tax')
 
         widgets = {
                     'basic_percentage':forms.NumberInput(attrs={'class': 'form-control','placeholder':'Basic '}),
@@ -115,9 +140,10 @@ class SalaryForm(forms.ModelForm):
 class UserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username','password1','password2')
+        fields = ('username','password1','password2' )
         
         widgets = {
+            
             'username':forms.TextInput(attrs={'class': 'form-control','placeholder':'UserName'}),
             'password1':forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Password'}),
             'password2':forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Re-Type Password'})
@@ -126,7 +152,7 @@ class UserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
                 
         super(UserCreationForm, self).__init__(*args, **kwargs)
-        self.fields['password1'].widget.attrs['class']='form-control'
+    
         self.fields['password1'].widget.attrs['placeholder']="Password"
-        self.fields['password2'].widget.attrs['class']='form-control'
+        
         self.fields['password2'].widget.attrs['placeholder']="Confirm Password"

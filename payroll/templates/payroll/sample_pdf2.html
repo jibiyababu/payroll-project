@@ -82,7 +82,7 @@
 
         <div class="wrapper">
             <div class ="box" align="center">
-                <h4 style="font-weight:bold;font-size:150%">Pay Slip for {{ salary.date }}</h4>
+                <h4 style="font-weight:bold;font-size:150%">Pay Slip for {{ salary.month_year }}</h4>
             </div>
             <div class="box" >
                 <table style=" border:0; border-style:solid; border-color:black;padding:5px; font-size:100%">
@@ -90,9 +90,9 @@
 
                     <tr>
                         <td  style="width: 16.66%">Employee:</td>
-                        <td >{{ salary.employee }}</td>
+                        <td >{{ salary.employee.name }}</td>
                         <td >Month:</td>
-                        <td >{{ salary.date }}</td>
+                        <td >{{ salary.month_year }}</td>
                     </tr>
 
                     <tr>
@@ -147,31 +147,35 @@
 
                     <tr>
                         <td style="width: 16.66%">Basic:</td>
-                        <td>  {{salary.basic_amount }} </td>
+                        <td align="right">  {{salary.basic_amount }} </td>
                         <td style="width:150">Proffessional Tax:</td>
-                        <td> {{ salary.proffessional_tax }} </td>
+                        <td align="right"> {{ salary.proffessional_tax }} </td>
                     </tr>
                     <tr>
                         <td  style="width: 16.66%">HRA:</td>
-                        <td>  {{salary.hra_amount }} </td>
+                        <td align="right">  {{salary.hra_amount }} </td>
                         <td  style="width: 16.66%">Income Tax: </td>
-                        <td>  {{ salary.income_tax }} </td>
+                        <td align="right">  {{ salary.income_tax }} </td>
                     </tr>
                     <tr>
                         <td style="width: 16.66%">Conveyance Allowance:</td>
-                        <td>  {{salary.conveyance_allowance }} </td>
+                        <td align="right">  {{salary.conveyance_allowance }} </td>
                         <td rowspan=2 style="width: 16.66%">Loss of Pay:</td>
-                        <td rowspan=2> {{ salary.loss_of_pay }} </td>
+                        <td align="right"rowspan=2> {{ salary.loss_of_pay }} </td>
                     </tr>
                     <tr>
                         <td style="width: 16.66%">Special Allowance:</td>
-                        <td>  {{salary.special_allowance }} </td>
+                        <td align="right">  {{salary.special_allowance }} </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16.66%">Bonus:</td>
+                        <td align="right">  {{salary.bonus }} </td>
                     </tr>
                     <tr style="font-weight:bold">
                         <td style="width: 16.66%" >Gross Earnings:</td>
-                        <td > {{ salary.gross_earning }}  </td>
+                        <td align="right"> {{ salary.gross_earning }}  </td>
                         <td style="width: 16.66%">Gross Deduction:</td>
-                        <td >{{ salary.gross_deduction }} </td>
+                        <td align="right">{{ salary.gross_deduction }} </td>
                     </tr>
 
 

@@ -2,18 +2,24 @@
 {%include 'payroll/messages.html' %}
 {% block content %}
 
-<h1>Pending Salary For {{date_now}} </h1>
+<h1>Pending Salary </h1>
 
 
 <div class="btn-toolbar mb-2 mb-md-0">
+
+
     <ul class="nav nav-tabs">
-
-
-
         <li class="nav-item">
-            <a class=" btn btn-light btn-sm" href="{% url 'update_salary'  %}">Update Salary
+            {% if not pk  %}
+
+            <a class=" btn btn-light btn-sm" href="{% url 'update_salary' %}">
+                {% else  %}
+                <a class=" btn btn-light btn-sm" href="{% url 'update_salary' pk=pk %}">
+                {% endif %}
+                <span class="glyphicon glyphicon-plus"></span>Update Salary Structure
             </a>
         </li>
+
 
         <li class="nav-item">
             <a class="active btn btn-light btn-sm" href="{% url 'salary_pending_list'  %}">Pending Salary
@@ -22,23 +28,30 @@
 
         <li class="nav-item">
 
-            <a class=" btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
             </a>
-
         </li>
+
+        <div class="dropdown-left">
+            <Button type="button"  id="dropdown-toggle" class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown">Appraisal</Button>
+
+       <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'salary_increment'  %}">Appraise</a>
+                <a class="dropdown-item" href="{% url 'salary_increment_list'  %}">View Appraisal</a>
+            </div>
+        </div>
+
 
         <li class="nav-item">
-
             <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
             </a>
-
         </li>
-
-
-
     </ul>
-</div>
 
+
+
+
+</div>
 </div>
 
 <div class="col-sm-7">
@@ -105,7 +118,7 @@
                 </thead>
                 <tbody>
                     {% for emp,salary,dept,desgn,jobtype,salary_history in zipped_list %}
-                    <tr><td><a class="fixed-side text-info font-weight-bold " href="{% url 'employee_detail' pk=emp.pk  %}">{{emp.user.username}}</a></td>
+                    <tr><td><a class="fixed-side text-info font-weight-bold " href="{% url 'employee_detail' pk=emp.pk  %}">{{emp.name}}</a></td>
                         <td>{{emp.emailid}}</td>
                         <td>{{emp.contact}}</td>
                         <td>{{emp.alter_Contact}}</td>

@@ -29,6 +29,17 @@
             <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
             </a>
         </li>
+
+        <div class="dropdown-left">
+            <Button type="button"  id="dropdown-toggle" class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown">Appraisal</Button>
+
+            <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'salary_increment'  %}">Appraise</a>
+                <a class="dropdown-item" href="{% url 'salary_increment_list'  %}">View Appraisal</a>
+            </div>
+        </div>
+
+
         <li class="nav-item">
             <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
             </a>
@@ -42,6 +53,16 @@
 
 
 <div class="col-sm-7">
+
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
     <form method="POST" class="salary_update_structure-form">{% csrf_token %}
         <div class="row">
             <div class="col">
@@ -99,7 +120,7 @@
 
 
                 <div class="row">
-                    <div class="col">
+                    <div class="col-md-6">
                         <div class="form-group">
                             {{ form.conveyance_allowance.errors }}
                             {{ form.conveyance_allowance.label_tag }}
@@ -109,17 +130,16 @@
                                  </p> -->
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="form-group">
-                            {{ form.special_allowance.errors }}
-                            {{ form.special_allowance.label_tag }}
-                            {{ form.special_allowance }}
-                            <!-- <p><label for="id_Special_allow">Special Allowance:</label>
-                                 <input type="number" name="special_allow" value="0" required maxlength="255" id="id_Special_allow" class="form-control"/>
-                                 </p> -->
-                        </div>
                     </div>
-                </div>
+                    <!-- <div class="col">
+                         <div class="form-group">
+                         {{ form.bonus.errors }}
+                         {{ form.bonus.label_tag }}
+                         {{ form.bonus }}
+                         <!-- <p><label for="id_Special_allow">Special Allowance:</label>
+                         <input type="number" name="special_allow" value="0" required maxlength="255" id="id_Special_allow" class="form-control"/>
+                         </p> -->
+
 
 
                 <div class ="row justify-content-center">
@@ -151,7 +171,7 @@
                                 </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-md">Update Salary Structure</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Update Salary Structure</button>
 
 
 

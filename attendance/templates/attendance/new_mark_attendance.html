@@ -1,26 +1,20 @@
 {% extends 'attendance/base.html' %}
-{%include 'login/messages.html' %}
+{% include 'login/messages.html' %}
 {% block content %}
 
 <h1>Mark Attendance</h1>
 
 <div class="btn-toolbar mb-2 mb-md-0">
-    <ul class="nav nav-tabs">
+    <div class="dropdown dropleft">
+        <Button type="button"  id="dropdown-toggle" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">View Attendance</Button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item"  href="{% url 'view_attendance'  %}">An Employee</a>
+            <a class="dropdown-item" href="{% url 'view_attendance_company'  %}">All Employee</a>
 
-
-
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'view_attendance'  %}">View Attendance</a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'view_attendance_company'  %}">View Attendance Company</a>
-        </li>
-    </ul>
+        </div>
+    </div>
 </div>
-
 </div>
-
 
 <form method="POST" class="employee-form">{% csrf_token %}
 
@@ -34,158 +28,170 @@
         </div>
         {% endfor %}
     </div>
+
     <div class="row mb-5">
         <div class="col-sm-3">
-             <label for=monthdate class="font-weight-bold">Attendance for:</label>
-             <span>{{form.monthdate}}</span>
+            <label for=monthdate class="font-weight-bold">Attendance for:</label>
+            <span>{{form.monthdate}}</span>
         </div>
-</div>
+    </div>
+
     <div class="row mb-3">
-        <div class="col-md-3">
+        <!-- <div class="col-md-3 font-weight-bold">
+             S.No
+             </div> -->
+        <div class="col-md-3 font-weight-bold">
             Employee
         </div>
-        <!-- <div class=col>
-             Date
-             </div> -->
-        <div class="col-sm-3">
+        <div class="col-sm-3 font-weight-bold">
             Mark
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 font-weight-bold">
             Leave-Type
         </div>
     </div>
     {{ Attendance_FormSet.management_form }}
 
+
+
     {% for form in Attendance_FormSet %}
+
+
     <div class="Attendance-FormSet">
-    <div class="row main-row">
-        <div class="col-md-3">
-            <div class="form-group">
-                {% if form.employee.errors %}
-                {% for error in form.employee.errors %}
-                {{ error|escape }}
-                {% endfor %}
-                {% endif %}
-                {{ form.employee }}
+        <div class="row main-row">
+
+            <!-- <div class="col m-1">
+                 <div class="form-group">
+                 {% if form.can_order %}
+                 {{form.ORDER}}
+                 {% endif %}
+                 </div>
+                 </div> -->
+
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    {% if form.employee.errors %}
+                    {% for error in form.employee.errors %}
+                    {{ error|escape }}
+                    {% endfor %}
+                    {% endif %}
+
+                    {{form.employee}}
+                </div>
             </div>
-        </div>
-        <!-- <div class="col">
-             <div class="form-group">
-             {% if form.date.errors %}
-             {% for error in form.date.errors %}
-             {{ error }}
-             {% endfor %}
-             {% endif %}
-             {{ form.date }}
-             </div>
-             </div> -->
-        <div class="col-sm-3">
-            <div class="form-group">
 
-                 {% for radio in form.mark %}
-                     <label for="{{ radio.id_for_label }}">
-                     {{ radio.choice_label }}
-                     <span class="radio">{{ radio.tag }}</span>
-                     </label>
-                     {% endfor %}
+            <div class="col-sm-3">
+                <div class="form-group">
+
+                    {% for radio in form.mark %}
+                    <label for="{{ radio.id_for_label }}">
+                        {{ radio.choice_label }}
+                        <span class="radio">{{ radio.tag }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
 
-    <div class="col-md-3">
-        <div class="form-group">
-            <div class="leave-type">
-            {{ form.leave_type.errors }}
-            {% if form.leave_type.errors %}
-            {% for error in form.leave_type.errors %}
-            {{ error|escape }}
-            {% endfor %}
-            {% endif %}
-            {{ form.leave_type}}
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="leave-type">
+                        {{ form.leave_type.errors }}
+                        {% if form.leave_type.errors %}
+                        {% for error in form.leave_type.errors %}
+                        {{ error|escape }}
+                        {% endfor %}
+                        {% endif %}
+                        {{ form.leave_type}}
+                    </div>
+                </div>
             </div>
+
         </div>
-    </div>
-</div>
-
-
-    <!-- <div class="col">
-         <div class="form-group">
-
-         {{ form.work_type}}
-         </div>
-         </div>
-       -->
-
-
-
-    <!-- {{ form.mark }} -->
-
-    <!-- <div class="col">
-         <div class="form-group">
-         {% for radio in form.work_type %}
-         <label for="{{ radio.id_for_label }}">
-         {{ radio.choice_label }}
-         <span class="radio">{{ radio.tag }}</span>
-         </label>
-         {% endfor %}
-         <!-- {{ form.work_type}} -->
-
-
-
     </div>
     {% endfor %}
     <button type="submit" class="btn btn-primary btn-sm" name="btnAttendance">Submit</button>
 </form>
 
 
+<!-- <div class="pagination">
+     <span class="step-links">
+     {% if emp_pages.has_previous %}
+     <a href="?page=1">&laquo; first</a>
+     <a href="?page={{ emp_pages.previous_page_number }}">previous</a>
+     {% endif %}
+
+     <span class="current">
+     Page {{ emp_pages.number }} of {{ emp_pages.paginator.num_pages }}.
+     </span>
+
+     {% if emp_pages.has_next %}
+     <a href="?page={{ emp_pages.next_page_number }}">next</a>
+     <a href="?page={{ emp_pages.paginator.num_pages }}">last &raquo;</a>
+     {% endif %}
+     </span>
+     </div>
+
+   -->
 
 
 
-           <script src="https://code.jquery.com/jquery-3.3.1.js"
-            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"> </script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"> </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
 
-<!-- <script>
-     $('.main-row').formset({
+<script>
+ $('.main-row').formset({
      addText: 'add employee',
-     deleteText: 'remove'
+     deleteText: 'remove',
+
+ });
+
+
+</script>
+
+
+
+
+ <!-- <script>
+     $('.leave-type').disabled=true;
+
+     $('.main-row').formset({
+
+
+
+     });
+     </script>-->
+
+<!-- <script>
+
+     $('.leave-type').hide();
+
+
+     $(document).ready(function() {
+     $('input[name = "form-0-mark"]').change(function(){
+
+     if ($(this).val() == "0"){
+     $('div#leave_type').show();
+     }
+
+     if ($(this).val() == "1"){
+     $('div#leave_type').hide();
+     }
+
+     if ($(this).val() == "0.5"){
+     $('div#leave_type').hide();
+     }
+     });
      });
 
+     </script>
 
-     </script> -->
-{%for radio in form.mark%}
-    <script>
-
-         $('.leave-type').hide();
+   -->
 
 
-         $(document).ready(function() {
-         $('input[name = "form-0-mark"]').change(function(){
 
-         if ($(this).val() == "0"){
-         $('div#leave_type').show();
-         }
-
-         if ($(this).val() == "1"){
-         $('div#leave_type').hide();
-         }
-
-         if ($(this).val() == "0.5"){
-         $('div#leave_type').hide();
-         }
-         });
-         });
-
-         </script>
-
-{% endfor%}
-
-
-{% if Attendance_formset.non_form_errors %}
-{% for error in link_formset.non_form_errors %}
-{{ error|escape }}
-{% endfor %}
-{% endif %}
 {% endblock %}

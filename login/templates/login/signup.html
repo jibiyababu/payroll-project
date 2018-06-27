@@ -1,7 +1,7 @@
 {% extends 'login/base.html'  %}
 {% block content %}
 
-<form method="POST" class="employee-form">{% csrf_token %}
+<form method="POST" enctype="multipart/form-data" class="employee-form">{% csrf_token %}
 
 
 
@@ -25,19 +25,23 @@
                  </div> -->
 
 
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        {{ companyform.errors }}
-                        {{ companyform.non_field_errors }}
-                    </div>
-                </div>
-            </div>
+            <!-- <div class="row">
+                 <div class="col">
+                 <div class="form-group">
+                 <div class="alert-danger">
+                 {{ companyform.errors.as_text }}
+                 {{ companyform.non_field_errors }}
+                 </div>
+                 </div>
+                 </div>
+                 </div> -->
 
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        {{ companyform.name.errors }}
+                        <div class="alert-danger">
+                            {{ companyform.name.errors.as_text }}
+                         </div>
                         {{ companyform.name.label_tag }}
                         {{ companyform.name }}
                     </div>
@@ -105,7 +109,9 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        {{ companyform.website.errors }}
+                        <div class="alert-danger">
+                            {{ companyform.website.errors.as_text }}
+                        </div>
                         {{ companyform.website.label_tag }}
                         {{ companyform.website }}
                     </div>
@@ -114,39 +120,7 @@
             </div>
 
 
-            <div class ="row justify-content-center">
-                <!--div class="col"-->
-                <div class="form-group">
-                    <div class="alert alert-light m-auto" role="alert">Admin :</div>
-                    <!--label for="id_deductions" style=" font-size: 1rem;">Deduction :</label-->
-                    <!--/div--></div></div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                {{ userform.username.errors }}
-                                {{ userform.username.label_tag }}
-                                {{ userform.username }}
 
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                {{ userform.password1.errors }}
-                                {{ userform.password1.label_tag }}
-                                {{ userform.password1 }}
-
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                {{ userform.password2.errors }}
-                                {{ userform.password2.label_tag }}
-                                {{ userform.password2 }}
-
-
-                            </div>
-                        </div>
-                    </div>
 
             <div class ="row justify-content-center">
                 <!--div class="col"-->
@@ -156,7 +130,20 @@
                     <!--/div--></div></div>
 
 
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                {{ employeeform.name.errors }}
+                                {{ employeeform.name.label_tag }}
+                                {{ employeeform.name }}
 
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
 
                     <div class="row">
                         <div class="col">
@@ -205,11 +192,19 @@
 
 
 
-                        <div class="col">
+                         <div class="col">
                             <div class="form-group">
                                 <!-- {{ form.emailid.errors }}-->
                                 {{ employeeform.emailid.label_tag }}
                                 {{ employeeform.emailid}}
+                            </div>
+                         </div>
+
+                         <div class="col">
+                            <div class="form-group">
+                                <!-- {{ form.emailid.errors }}-->
+                                <label for="id_office_emailid">Office Email Address:</label>
+                                {{ employeeform.office_emailid}}
                             </div>
                         </div>
                     </div>
@@ -240,13 +235,49 @@
                         </div>
                     </div>
 
- <div class ="row justify-content-center">
+
+
+
+<div class ="row justify-content-center">
+                <!--div class="col"-->
+                <div class="form-group">
+                    <div class="alert alert-light m-auto" role="alert">Login Credentials :</div>
+                    <!--label for="id_deductions" style=" font-size: 1rem;">Deduction :</label-->
+                    <!--/div--></div></div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {% if userform.username.errors%}
+                                <div class="alert alert-success">
+                                    {{ userform.username.errors }}
+                                </div>
+                                {% endif %}
+                                {{ userform.username.label_tag }}
+                                {{ userform.username }}
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                               <div class="alert-light"> {{ userform.password1.errors }}</div>
+                                {{ userform.password1.label_tag }}
+                                {{ userform.password1 }}
+
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="alert-danger"> {{ userform.password2.errors }}</div>
+                                {{ userform.password2.label_tag }}
+                                {{ userform.password2 }}
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+<div class ="row justify-content-center">
                     <button type="submit" class="btn btn-primary btn-md" name="btnCompany">Submit</button></div>
 </form>
-
-
-
-
-
-
                     {% endblock %}

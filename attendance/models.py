@@ -28,8 +28,6 @@ class Attendance(models.Model):
                                   choices = LEAVE_CHOICES,
                                   blank = True
                                )
-    # isHalfDay = models.BooleanField()
-    # isWorkFromHome = models.BooleanField()
     remPrivilegeLeave=models.IntegerField(null=True,blank=True)
     remCasualLeave=models.IntegerField(null=True,blank=True)
     pl=models.IntegerField(default=0)
@@ -39,7 +37,7 @@ class Attendance(models.Model):
         self.save()
 
     def __str__(self):
-        return self.employee.user.username +" "+ str(self.date)
+        return str(self.employee.user.username)+str(self.date) + " " + str(self.mark)
  
 
 class Leave_Application(models.Model):

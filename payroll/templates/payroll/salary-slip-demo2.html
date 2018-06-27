@@ -70,9 +70,9 @@
 <table class="table table-sm float-center " style=" border:none; font-weight:bold">
 <tr>
 <td  style="width: 16.66%">Employee:</td>
-<td >{{ salary.employee }}</td>
+<td >{{ salary.employee.name }}</td>
 <td >Month:</td>
-<td >{{ salary.date }}</td>
+<td >{{ salary.month_year }}</td>
 </tr>
 <tr>
     <td style="width: 16.66%">Department:</td>
@@ -152,6 +152,10 @@
 <tr>
 <td style="width: 16.66%">Special Allowance:</td>
 <td>  {{salary.special_allowance }} </td>
+</tr>
+<tr>
+<td style="width: 16.66%">Bonus:</td>
+<td>  {{salary.bonus }} </td>
 </tr>
 <tr >
 <td style="padding:15px;width: 16.66%" >Gross Earnings:</td>

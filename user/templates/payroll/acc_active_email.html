@@ -1,5 +1,8 @@
-{% autoescape off %}
-Hi {{ user.username }},
-Please click on the link to confirm your registration,
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
-{% endautoescape %}
+<!-- {% autoescape off %} -->
+<h4>Hello {{ salary.employee.name }},</h4><br><br>
+<h5><p>Attached is payslip for {{salary.month_year}} from {{company.name}}</p></h5><br><br><br><br>
+<h5>Thanks & Regards,
+{{admin.name}},
+{{dept.department.get_department_display}}-{{desgn.designation.get_designation_display}}
+<img src={{company.logo.url}}></img>{{company.name}}</h5>
+<!-- {% endautoescape %} -->

@@ -50,7 +50,7 @@
     <div class="row border-bottom mb-md-2 ">
         <div class="col">
             <img  src="{{ employee.profile_pic.url  }}" width=150px height=150px>
-            <p><h4>Name: {{employee.user.username}}</h></p>
+            <p><h4>Name: {{employee.name}}</h></p>
 
         </div>
         <div class="col">
@@ -179,10 +179,10 @@
                     </tr>
 
 
-                    <tr>
-                        <td style="width: 16.66%">Salary:</td>
-                        <td>{{employee.salary}}</td>
-                    </tr>
+                    <!-- <tr>
+                         <td style="width: 16.66%">Salary:</td>
+                         <td>{{employee.salary}}</td>
+                         </tr> -->
 
                     <table>
             </div>
@@ -190,13 +190,18 @@
 
         <div class="alert alert-light border" role="alert"><h6>Salary Structure :</h6></div>
 
-            <div class="col border">
+        <div class="col border">
+
 {% if salary == None %}
                 <strong class="text-danger font-italic">Salary structure not added</strong>
                 {% else %}
 
             <div class="table-responsive-sm">
                 <table class="table table-md">
+                    <tr>
+                        <td style="width: 16.66%">Annual Salary :</td>
+                        <td>{{annual_salary.salary}}</td>
+                    </tr>
                     <tr>
                         <td colspan=2 style="width: 16.66%"><strong>Allowance:</strong></td>
                         <td colspan=2 style="width: 16.66%"><strong>Deduction:</strong></td>
@@ -220,11 +225,7 @@
                         <td>{{salary.conveyance_allowance}}</td>
 
                                       </tr>
-                                                    <tr>
-                        <td style="width: 16.66%">Special Allowance</td>
-                        <td>{{salary.special_allowance}}</td>
 
-                    </tr>
     </div>
 
 {% endif %}

@@ -37,6 +37,7 @@ class CompanyForm(forms.ModelForm):
                   'website',
                   'logo'
                 )
+        
         widgets = {
             'name':forms.TextInput(attrs={'class': 'form-control','placeholder':'Company Name'}),
             'address_line_1':forms.TextInput(attrs={'class': 'form-control','placeholder':'Line 1'}),
@@ -46,7 +47,7 @@ class CompanyForm(forms.ModelForm):
             'country':forms.TextInput(attrs={'class': 'form-control','placeholder':'Country'}),
             'fax':forms.NumberInput(attrs={'class': 'form-control','placeholder':'Fax'}),
             'website':forms.URLInput(attrs={'class': 'form-control','placeholder':'Website'}),
-            'logo':forms.FileInput(attrs={'class': 'form-control','placeholder':'Profile Picture'})
+            'logo':forms.ClearableFileInput(attrs={'class': 'form-control','placeholder':'Profile Picture'})
                 }
     def clean_name(self):
         name=self.cleaned_data['name']

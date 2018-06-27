@@ -69,13 +69,14 @@
                 </div>
             </div>
 
+<div class="row justify-content-center">
+            <button type="submit" class="btn btn-primary btn-md " name="btnCompany">Add</button>
+</div>
 
-            <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Add</button>
-
-            <a class="btn btn-primary btn-sm" href="{% url 'add_department'  %}">View Holiday</a>
     </div>
 
 </div>
+{% if holiday_list %}
 <div class="row mt-4">
     <div class="col">
         <table class="table table-md" style="width: 80.66%">
@@ -101,7 +102,7 @@
         </table>
     </div>
 </div>
-
+{% endif %}
 
 
 {% endblock  %}

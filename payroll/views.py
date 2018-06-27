@@ -2,7 +2,8 @@ from .models import Salary
 from user.models import Salary_History,Employee
 from user.models import Department_History
 from user.models import Designation_History
-from user.models import Job_Type_History
+from user.models import Job_Type_History,Salary_Increment
+from user.forms import SalaryIncrementForm
 from attendance.models import Attendance
 from company.models import Company
 from company.models import Department,Holiday
@@ -18,7 +19,6 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import calendar
 from calendar import weekday, monthrange, SUNDAY ,SATURDAY
-import datetime
 from num2words import num2words
 from .render import *
 from django.views.generic import View
@@ -26,61 +26,72 @@ import base64
 import decimal
 from payroll.decorators import work_type_required
 from django.core.exceptions import ObjectDoesNotExist
-
+from datetime import datetime, date, time
+import datetime
 from threading import Thread, activeCount
-  
-# Create your views here.
-
+from django.core.mail import BadHeaderError, send_mail, EmailMessage
+from django.template.loader import render_to_string
 
 
 # view for updating salary-history of an employee
-
-
-
-
-
-
 
 @login_required(login_url = "login")
 def update_salary(request, pk = None):
     company=request.user.employee.company
     get_worktype(company)
-    
+    try:
+        salary=Salary_Increment.objects.filter(employee=pk,effective_from__lte=timezone.now()).latest('id')
+    except ObjectDoesNotExist:
+        salary=None
+    print('salary',salary)
+        #if salary:
     if request.method=="POST":
-        form=Salary_History_Form(request.POST)
-        if form.is_valid():
-            if not pk:
-                pk = request.POST['employee']
-            record=form.save(commit=False)
+        if salary:
+            form=Salary_History_Form(request.POST)
+            emp=request.POST['employee']
+            print(form.is_valid())
+            if form.is_valid():
+                if not pk:
+                    pk = request.POST['employee']
+                record=form.save(commit=False)
             
-            record.save()
-            messages.success(request,'Salary updated successfully')
-            return redirect('salary_detail',pk=pk)
+                record.save()
+                #messages.success(request,'Salary updated successfully')
+                print('pk',pk)
+                return redirect('salary_monthyear',pk=pk)
+            else:
+                messages.success(request,'Invalid Details !')
+                return redirect('update_salary',pk=pk)
         else:
-            message.success(request,'Invalid Details !')
+            messages.success(request,'Please add annual salary !')
             return redirect('update_salary',pk=pk)
+            
     else:
         try:
             salary_history = Salary_History.objects.filter(employee_id=pk).latest('id')
-            form=Salary_History_Form(instance=salary_history)
+            form=Salary_History_Form(company=company,instance=salary_history)
         except:
             
             salary_history={
                 'employee':pk,
                 'date':timezone.now()
             }
-            
-            form=Salary_History_Form(initial=salary_history)
-
+            #print('salary_history',salary_history.employee)
+            form=Salary_History_Form(company=company,initial=salary_history)
+    
+        
+        
+    
     return render(request,
                   'payroll/update_salary_structure.html',
                   {'form':form}
     )
 
+
 # function for calculation of basic of salary
 def basic_sal(pk,basic_percentage):
     
-    record=Employee.objects.get(pk=pk)
+    record=Salary_Increment.objects.filter(effective_from__lte=timezone.now()).latest('id')
     salary= float(record.salary)/12.0
     result=round((basic_percentage/100) * salary)
     return result
@@ -88,21 +99,21 @@ def basic_sal(pk,basic_percentage):
 # function for calculation of hra of salary
 def hra_sal(pk,hra_percentage):
     
-    record=Employee.objects.get(pk=pk)
+    record=Salary_Increment.objects.filter(effective_from__lte=timezone.now()).latest('id')
     salary = float(record.salary)/12
     result = round((hra_percentage/100) * salary)
     return result
 
 # function for calculation of Gross Earnings
-def gross_earning(pk, basic, hra, conveyance_allow, special_allow): # Function definition for gross_earning
+def gross_earning(pk, basic, hra, conveyance_allow): # Function definition for gross_earning
     
-    record=Employee.objects.get(pk=pk)
+    record=Salary_Increment.objects.filter(effective_from__lte=timezone.now()).latest('id')
     salary= float(record.salary)/12
     basic/=100
     basic_amount=basic * salary
     hra/=100
     hra_amount = hra * salary
-    gross_earnings = basic_amount + hra_amount + conveyance_allow + special_allow
+    gross_earnings = basic_amount + hra_amount + conveyance_allow 
     print('type of gross earning',type(gross_earnings))
     print(gross_earnings)
     return gross_earnings
@@ -124,7 +135,7 @@ def check_weekend(company,saturday,sunday):
             return sunday
         else:
             return saturday+sunday
-    
+        
     except:
         
         return 0
@@ -142,22 +153,23 @@ def check_attendance(employee,month):
 
 
 # function for calculating loss of pay for an employee
-def check_lossofpay(emp_pk):
-    now = datetime.datetime.now()
-    month_days = calendar.monthrange(now.year, now.month)[1] # returns month for eg: June, month=6
-
-    employee = get_object_or_404(Employee,pk=emp_pk)
-    salary_per_day = round((employee.salary/12)/month_days) # An Employee's annual salary is converted into salary per day     
+def check_lossofpay(emp_pk,date):
+    print('date',type(date))
     try:
-        attendance=Attendance.objects.filter(employee=emp_pk, date__month=now.month, lop=True).annotate(Count('id'))
+        attendance=Attendance.objects.filter(employee=emp_pk, date__month=date.month, lop=True,mark=0).annotate(Count('id'))
         lop_days = len(attendance)
-    except:
+        
+    except ObjectDoesNotExist:
         attendance=0
         lop_days = attendance
-    
+
+    employee = Salary_Increment.objects.filter(employee=emp_pk,effective_from__lte=date).latest('id')
+    month_days = calendar.monthrange(date.year,date.month)[1] # returns month for eg: June, month=6
+        
+    salary_per_day = round((employee.salary/12)/month_days) # An Employee's annual salary is converted into salary per day 
     lop = lop_days * salary_per_day
     return lop
-    
+
 
 #this function checks worktype exist or not 
 def get_worktype(company_id):
@@ -217,17 +229,38 @@ def get_salary(employee):
         salary=None
         return salary
 
+@login_required(login_url = "login")
+def salary_monthyear(request,pk=None):
+    if request.method=="POST":
+        form=SalaryForm(request.POST)
+        monthyear=request.POST['month_year']
+        date=datetime.datetime.strptime(str(monthyear), "%Y-%m-%d")
+        try:
+            salary=Salary_Increment.objects.filter(employee=pk,effective_from__lte=date).latest('id')
+        except ObjectDoesNotExist:
+            salary=None
+        if salary:
+            monthyear=request.POST['month_year']
+            return redirect('salary_detail',pk=pk,monthyear=monthyear)
+        else:
+            messages.success(request,'Please add Annual Salary effective from month_year')
+            return redirect('salary_monthyear',pk=pk)
+    else:
+        form=SalaryForm({'employee':pk})
+    return render(request,'payroll/salary_monthyear.html',{'form':form,'pk':pk})
     
 # This View calculates salary from salary-history of an employee
 @login_required(login_url = "login")
-def salary_detail(request,pk): 
+def salary_detail(request,pk,monthyear):
+    
     record=Employee.objects.get(pk=pk)
     salary_history = Salary_History.objects.filter(employee_id=pk).values().last()
+    month_year=datetime.datetime.strptime(str(monthyear), "%Y-%m-%d")
     
-    lop=check_lossofpay(pk) #  check_lossofpay() returns loss-of-pay for an employee
-    
+    lop=check_lossofpay(pk,month_year) #  check_lossofpay() returns loss-of-pay for an employee
+        
     data = {
-        'month_year' : timezone.now(),
+        'month_year' : monthyear,
         'employee' : salary_history['employee_id'],
         'basic_percentage' : salary_history['basic_percentage'],
         'basic_amount' : basic_sal(salary_history['employee_id'],
@@ -240,7 +273,7 @@ def salary_detail(request,pk):
         ) ,
         
         'conveyance_allowance' : salary_history['conveyance_allowance'],
-        'special_allowance' : salary_history['special_allowance'],
+        #'special_allowance' : salary_history['special_allowance'],
         
         'proffessional_tax' : salary_history['proffessional_tax'],
         'income_tax' : salary_history['income_tax'],
@@ -249,82 +282,102 @@ def salary_detail(request,pk):
         'gross_earning' : gross_earning(salary_history['employee_id'],
                                         salary_history['basic_percentage'],
                                         salary_history['hra_percentage'],
-                                        salary_history['conveyance_allowance'],
-                                        salary_history['special_allowance']
+                                        salary_history['conveyance_allowance']
+                                        # salary_history['special_allowance']
         ) ,
         
         # Function call for gross_deduction
-         'gross_deduction' : gross_deduction(salary_history['employee_id'],
-                                             salary_history['proffessional_tax'],
-                                             salary_history['income_tax'],
-                                             lop                                         
-                                            ) 
+        'gross_deduction' : gross_deduction(salary_history['employee_id'],
+                                            salary_history['proffessional_tax'],
+                                            salary_history['income_tax'],
+                                            lop                                         
+        ) 
         
-
-           }
-    employee = get_object_or_404(Employee,pk=pk)
+        
+    }
+    
+    employee = Salary_Increment.objects.filter(effective_from__lte=timezone.now()).latest('id')
     salary_month = round((employee.salary/12))
-    data['special_allowance'] =salary_month-( decimal.Decimal(data['gross_earning'])+data['gross_deduction'])
+    data['special_allowance'] =round(salary_month-( decimal.Decimal(data['gross_earning'])+data['gross_deduction']))
     data['gross_earning']+=float(data['special_allowance'])
     data['net_salary'] = decimal.Decimal(data['gross_earning']) - data['gross_deduction']
-    
+    data['bonus']=0
     # data['gross earning'] returns float hence it is converted to decimal
     
-    if request.method=="POST":
+    if request.method=="POST" :
         form = SalaryForm(data,request.POST)
         
         print('form.bound:',form.is_bound)
         print('form.is_valid():',form.errors)
         #print('payslip_for_month',request.POST['payslip_for_month'])
         #monthyear=request.POST['month_year']
-        month = datetime.datetime.strptime(str(request.POST['month_year']), "%Y-%m-%d").strftime("%m")
-        year = datetime.datetime.strptime(str(request.POST['month_year']), "%Y-%m-%d").strftime("%Y")
-        print('form',form.errors)
-        print('month-year',month,year)
-        payslip = Salary.objects.filter(employee=pk,month_year__month=month,month_year__year=year).exists()
+        
+        # print('form',form.errors)
+        # print('month-year',month,year)
+        payslip = Salary.objects.filter(employee=pk,month_year=monthyear).exists()
         if form.is_valid():
             if not payslip:
-                
                 salary = form.save(commit=False)
-                #date=form.cleaned_data.get('month_year')
                 
-                salary.date= timezone.now()
-                #print('date',date)
-                #print('typeof date',type(date))
-                salary.month_year=form.cleaned_data.get('month_year')
-                #datetime.datetime.strptime(str(date), "%Y-%m-%d").strftime("%m-%Y")
-            
+                
+                # print('month_year',month_year)
                 now = datetime.datetime.now()
-                month_days = calendar.monthrange(now.year, now.month)[1]
-                salary.total_days = month_days
-                matrix = calendar.monthcalendar(now.year,
-                                            now.month
-                )
+                month_days = calendar.monthrange(month_year.year, month_year.month)[1]
+                print('month_days',month_days)
+                matrix = calendar.monthcalendar(month_year.year,
+                                                    month_year.month)
                 x = sum(1 for x in matrix if x[SUNDAY] != 0)
                 y = sum(1 for x in matrix if x[SATURDAY] != 0)
+                holiday=Holiday.objects.filter(date__month=month_year.month).annotate(Count('id'))
+                if holiday:
+                    holiday=len(holiday)
+                else:
+                    holiday=0
+                    
+                start_date=date(month_year.year,month_year.month,1)
+                end_date=date(month_year.year,month_year.month,month_days)
+                count=Attendance.objects.filter(employee=pk,date__range=[start_date,end_date])
+                weekend=check_weekend(request.user.employee.company,x,y)
+                working_days=month_days-(weekend + holiday)
+                print('holiday',holiday)
+                print('weekend',weekend)
+                print('len(count)',len(count))
+                print('working_days',working_days)
+                if len(count)==working_days:
+                                         
+                    
+                    
+                    salary.date= timezone.now()
+                    salary.month_year=month_year
+                        
+                    salary.bonus = form.cleaned_data.get('bonus')
             
-                salary.weekend = check_weekend(request.user.employee.company,x,y) # check_weekend() returns weekends based on company's wortype
+                    salary.total_days = month_days
+                    salary.weekend = weekend # check_weekend() returns weekends based on company's wortype
+                    
+                
+                    salary.public_holidays = holiday
+                    salary.working_days = salary.total_days - (salary.weekend + salary.public_holidays)
+                    salary.attendance = check_attendance(salary.employee,month_year.month)
+                    
             
-                holiday=Holiday.objects.filter(date__month=now.month).annotate(Count('id'))
-                salary.public_holidays = len(holiday)
-                salary.working_days = salary.total_days - (salary.weekend + salary.public_holidays)
-                salary.attendance = check_attendance(salary.employee,now.month)
-            
-            
-                salary.save()
-                messages.success(request,'save successfully')
-                return redirect('salary_slip', pk=salary.pk)
+                    salary.save()
+                    messages.success(request,'save successfully')
+                    return redirect('salary_slip', pk=salary.pk)
+                else:
+                    messages.success(request,"Attendance for this month is not completed ")
+                    return redirect('salary_detail',pk,monthyear)
             else:
                 messages.success(request,"Payslip has already been generated for this month")
-                return redirect('salary_detail',pk)
+                return redirect('salary_detail',pk,monthyear)
 
         else:
-           messages.success(request, 'Invalid Credentials.')
-           return redirect('salary_detail',pk)
-       
+            messages.success(request, 'Invalid Credentials.')
+            return redirect('salary_detail',pk,monthyear)
+                                         
     else:
         form=SalaryForm(data)
-                
+
     return render(request,'payroll/salary_details.html',{'form':form,'pk':pk})
 
     
@@ -332,27 +385,65 @@ def salary_detail(request,pk):
 
 
 # def view_salary_slip(request):
-#     if request.method == 'POST':
-#         form = SalaryDateForm(request.POST)
-#         if form.is_valid():
-#             employee=form.cleaned_data_get('employee')
-#             start_date=form.cleaned_data_get('start_date')
-#             end_date=form.cleaned_data_get('end_date')
-#             record=Salary.objects.filter(employee=employee,month_year__range=[start_date,end_date])
+                                         #     if request.method == 'POST':
+                                         #         form = SalaryDateForm(request.POST)
+                                         #         if form.is_valid():
+                                         #             employee=form.cleaned_data_get('employee')
+                                         #             start_date=form.cleaned_data_get('start_date')
+                                         #             end_date=form.cleaned_data_get('end_date')
+                                         #             record=Salary.objects.filter(employee=employee,month_year__range=[start_date,end_date])
              
 #     return render(request,'payroll/view_salary_details.html',{'form':form,'pk':pk})
 
 
 
+
+@login_required(login_url = "login")
+def salary_increment(request):
+    company=request.user.employee.company
+    if request.method=="POST":
+        form=SalaryIncrementForm(request.POST)
+        if form.is_valid():
+            record=form.save(commit=False)
+            record.date=timezone.now()
+            record.save()
+            messages.success(request,"Salary incremented successfuly")
+            return redirect('salary_increment')
+        else:
+            messages.success(request,"Invalid details")
+            return redirect('salary_increment')
+            
+    else:
+        form=SalaryIncrementForm(company=company)
+    return render(request,'payroll/salary_increment.html',{'form':form})
+
+@login_required(login_url = "login")
+def salary_increment_list(request):
+    company=request.user.employee.company
+    if request.method=="POST":
+        form=SalaryIncrementForm(request.POST)
+        if form.is_valid():
+            employee=request.POST['employee']
+            record=Salary_Increment.objects.filter(employee=employee)
+            return render(request,'payroll/salary_increment_list.html',{'form':form,'record':record})
+        else:
+            messages.success(request,"Invalid details")
+            return redirect('salary_increment_list')
+    else:
+        form=SalaryIncrementForm(company=company)
+    return render(request,'payroll/salary_increment_list.html',{'form':form})
+
+        
 #This view generates salary slip from salary of an employee
 @login_required(login_url = "login")
 def salary_slip(request,pk):
+    
 
     salary = get_object_or_404(Salary,pk=pk)
     amount_words = num2words(salary.net_salary).title() #converts net_salary amount into words
     dept = get_department(salary.employee) 
     desgn = get_designation(salary.employee)
-    
+                                         
     return render(request,
                   'payroll/salary-slip-demo2.html',
                   {
@@ -363,6 +454,35 @@ def salary_slip(request,pk):
                   })
 
 #this view renders html into pdf
+
+@login_required(login_url = "login")
+def report_salary_pdf(request,pk):
+    salary = get_object_or_404(Salary,pk=pk)
+    company = get_object_or_404(Company,pk=request.user.employee.company.pk)
+    amount_words = num2words(salary.net_salary).title()
+    dept = get_department(salary.employee)
+    desgn = get_designation(salary.employee)
+    logo=company.logo
+
+    try:
+        img_logo = open(logo.path,"rb")
+        encoded_string = base64.b64encode(img_logo.read())
+        
+    except:
+        encoded_string = logo
+                                         
+            
+    params = {
+        'salary':salary,
+        'amount_words':amount_words,
+        'dept':dept,
+        'desgn':desgn,
+        'encoded_string':encoded_string,
+        'company':company,
+        'request':request
+    }
+    return Render.render('payroll/sample_pdf2.html', params)
+
 @login_required(login_url = "login")
 def salary_pdf(request,pk):
 
@@ -371,53 +491,53 @@ def salary_pdf(request,pk):
     amount_words = num2words(salary.net_salary).title()
     dept = get_department(salary.employee)
     desgn = get_designation(salary.employee)
-    
+                                         
     logo=company.logo
 
     try:
         img_logo = open(logo.path,"rb")
         encoded_string = base64.b64encode(img_logo.read())
-
+        
     except:
         encoded_string = logo
-    
+                                         
             
     params = {
-            'salary':salary,
-            'amount_words':amount_words,
-            'dept':dept,
-            'desgn':desgn,
-            'encoded_string':encoded_string,
-            'company':company,
-            'request':request
-        }
+        'salary':salary,
+        'amount_words':amount_words,
+        'dept':dept,
+        'desgn':desgn,
+        'encoded_string':encoded_string,
+        'company':company,
+        'request':request
+    }
     file = Render.render_to_file('payroll/sample_pdf2.html', params)
-
-    # current_site = get_current_site(request)
-    # mail_subject = "Activate your Payroll account"
-    # message = render_to_string("payroll/acc_active_email.html",{
-    #     'user': salary.employee,
-    #     'domain': current_site.domain,
-    #     'uid':urlsafe_base64_encode(force_bytes(salary.employee.pk))
-    #     #'token':account_activation_token.make_token(user),
-        
-    # })
-    # to_email="gibiyababu@gmail.com"
-    # #to_email = employeeform.cleaned_data.get('emailid')
-    # files=[("attachment", (file[0], open(file[1], "rb").read()))],
-    # email = EmailMessage(mail_subject, message, to=[to_email])
-    # email.send(args=files)
     
-    return HttpResponse("Processed")
-    #return Render.render(
-    #    'payroll/sample_pdf2.html',
-    #    params
-    #)
+    print('file',file)
+    mail_subject = "Payslip for %s"%(salary.month_year)
+    
+    message=''' Hello %s,
 
+   Attached is payslip for %s from %s.
+
+
+    Thanks & regards,
+    %s,
+    %s'''%(salary.employee.name,salary.month_year,company.name,request.user.employee.name,company.name)
+
+    files=[("attachment", (file[0], open(file[1], "rb").read()))]
+    message = EmailMessage(mail_subject, message,'support@mydomain.com',
+                               [salary.employee.emailid,],)
+                               
+    attachment = open(file[1], 'rb')
+    message.attach(file[0],attachment.read(),'application/pdf')
+    message.send()
+    return HttpResponse("Processed")
+    
 
 
 # @login_required(login_url = "login")
-# def salary_pending_list(request):
+                                         # def salary_pending_list(request):
 
     
 @login_required(login_url = "login")
@@ -436,12 +556,12 @@ def salary_pending_list(request):
     emp_count = Employee.objects.filter(company=company).annotate(Count('id'))
     
     #sal_count=Salary.objects.filter(month_year=monthyear)
-    # print('salary for may',sal_count)
+                                         # print('salary for may',sal_count)
     for emp in emp_count:
         try:
             salary = Salary.objects.filter(employee = emp).latest('id')
             if not salary.month_year == monthyear:
-                
+                                         
                 
                 desgn = get_designation(emp)
                 dept = get_department(emp)
@@ -458,7 +578,7 @@ def salary_pending_list(request):
                 print(salary.employee,salary.date,salary.month_year)
                 count+=1
         except ObjectDoesNotExist:
-            
+                                         
 
             # desgn = None
             # dept = None
@@ -481,8 +601,8 @@ def salary_pending_list(request):
             #print('except:',emp_list)
     if not emp_list:
         message = "No pending salary to show"
-    print(len(emp_count))
-    print('count',count)
+        print(len(emp_count))
+        print('count',count)
     paid=(count/len(emp_count))*100
     unpaid=((len(emp_count)-count)/len(emp_count))*100
     print('paid',paid)
@@ -504,7 +624,7 @@ def salary_pending_list(request):
                 
 @login_required(login_url = "login")
 def salary_employee_list(request):
-     
+                                         
     desgn_list = []
     dept_list = []
     jobtype_list = []
@@ -523,13 +643,16 @@ def salary_employee_list(request):
         dept = get_department(emp)
         jobtype = get_jobtype(emp)
         salary = get_salary(emp)
-        salary_his = Salary_History.objects.filter(employee= emp).latest('id')
+        try:
+            salary_history = Salary_History.objects.filter(employee= emp).latest('id')
+        except:
+            salary_history = None
         desgn_list.append(desgn)
         dept_list.append(dept)
         jobtype_list.append(jobtype)
         salary_list.append(salary)
-        salary_his_list.append(salary_his)
-        
+        salary_his_list.append(salary_history)
+                                         
          # try:
          #     desgn=Designation_History.objects.filter(employee=c).latest('id')
          #     dept=Department_History.objects.filter(employee=c).latest('id')
@@ -558,7 +681,7 @@ def salary_employee_list(request):
 def salary_report(request):
     company=request.user.employee.company
     if request.method=="POST":
-        
+                                         
         print('company',company)
         form=SalaryReportForm(request.POST)
         print(form)
@@ -570,7 +693,7 @@ def salary_report(request):
             print('records',records)
             messages.success(request,'Valid Credentials')
             return render(request,'payroll/salary_report.html',{'records':records})
-
+        
         else:
             messages.success(request,'Invalid Details !')
             return redirect('view_salary')

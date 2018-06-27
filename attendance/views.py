@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from company.models import Holiday
 from .models import Attendance,Leave_Application
 from .forms import AttendanceForm, ViewAttendanceForm
 from .forms import LeaveApplicationForm, ViewAttendanceCompanyForm
+from user.forms import EmployeeForm
 from user.models import Designation_History,Employee
 from user.views import employee_detail
 from company.models import Designation
@@ -13,145 +15,147 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Count
 from django.forms import formset_factory
+from django.forms import modelformset_factory
 from django.core.paginator import Paginator,PageNotAnInteger
 import datetime
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # Create your views here.
 
 def new_mark_attendance(request):
     
     company=request.user.employee.company
     emp_count=Employee.objects.filter(company=company)
-    attendance_record=Attendance.objects.filter(employee__in=emp_count,date=datetime.datetime.now().date())
-    print(emp_count)
+    print('emp_count',emp_count)
     data=[{
         'employee':emp
           }for emp in emp_count]
     
-    AttendanceFormSet = formset_factory(AttendanceForm,max_num=1)
-
-    
+    AttendanceFormSet= formset_factory(AttendanceForm,max_num=1,can_order=True,can_delete=True)
     if request.method=="POST":
         form=ViewAttendanceCompanyForm(request.POST)
         Attendance_FormSet=AttendanceFormSet(request.POST)
-    
+        #attendance_form=AttendanceForm(request.POST)
+        
         if Attendance_FormSet.is_valid():
+            #attendance=Attendance_FormSet.save(commit=False)
+            print('errors',Attendance_FormSet.errors)
             
-            #attendance_record=Attendance.objects.filter(employee__in=emp_count,date=datetime.datetime.now().date()).exists()
+            new_records=[]
+            date=datetime.datetime.strptime(request.POST['monthdate'], "%Y-%m-%d")
+            holiday=Holiday.objects.filter(date=date).exists()
             
-            print('attendance_record',attendance_record)
+            
+            
             if not False:
-                # attendance_record:
-                new_records=[]
-                for Attendance_Form in Attendance_FormSet:
-                    employee=Attendance_Form.cleaned_data.get('employee')
-                    print('employee',employee)
-                    date=request.POST['monthdate']
-                    
-                    mark=Attendance_Form.cleaned_data.get('mark')
-                
-                    leave_type=Attendance_Form.cleaned_data.get('leave_type')
-                    print('leave-type',leave_type)
-                    try:
-                        last_record=Attendance.objects.filter(employee = employee.pk).latest('id')
-                        print('last_Record',last_record)
-                    except ObjectDoesNotExist:
-                        last_record = None
-                   
-                    try:
-                    
-                        dsgn=Designation_History.objects.filter(employee=employee.pk).latest('id')
-                        print('dsgn-pl',dsgn.designation.privilege_leave)
-                        if last_record: 
-                            remPrivilegeLeave = last_record.remPrivilegeLeave
-                            remCasualLeave = last_record.remCasualLeave
-                            pl = last_record.pl
-                            cl = last_record.cl
-                            print('rempl',remPrivilegeLeave)
-                            
-                        else:
-                            
-                            remPrivilegeLeave = dsgn.designation.privilege_leave
-                            remCasualLeave = dsgn.designation.casual_leave
-                            print('rempl',remPrivilegeLeave)
+                if not holiday and not date.weekday() == 5 and not date.weekday() == 6:
 
-                                        
-                    
-
-
-                        print('employee',employee)
-                        print('date',date)
-                        print('mark',mark)
-                        print('leave_Type',leave_type)
-                        print('remPrivilegeLeave',remPrivilegeLeave)
-                        print('remCasualLeave',remCasualLeave)
-                        # print('pl',pl)
-                        # print('cl',cl)
-                        #if employee and date and mark  and remPrivilegeLeave and remCasualLeave :
-                        # if not lop:
-                        #     lop=False
-                    
-                        new_records.append(Attendance(
-                            employee=employee,
-                            date=date,
-                            mark=mark,
-                            leave_type=leave_type,
-                            remPrivilegeLeave=remPrivilegeLeave,
-                            remCasualLeave=remCasualLeave,
-                            
-                        ))
-                        print('new_Records',new_records)
-                    # if pl and cl:
-                    #     new_records.append(Attendance(
-                    #     employee=employee,
-                    #     date=date,
-                    #     mark=mark,
-                    #     leave_type=leave_type,
-                    #     remPrivilegeLeave=remPrivilegeLeave,
-                    #     remCasualLeave=remCasualLeave,
-                    #     pl=pl,
-                    #     cl=cl
-                    # ))
+                    for attendance_form in Attendance_FormSet:
+                        print('attendance_Form',attendance_form)
                         
-                    
+
+                        print('attendance',attendance_form.cleaned_data.get('employee'))
+                        employee=attendance_form.cleaned_data.get('employee')
+                        print('date & employee',date,employee)
+                        attendance_exist=Attendance.objects.filter(employee=employee,date=date).exists()
+                        print('attendance_Exist',attendance_exist)
+                        if not attendance_exist:
+                            print('employee',employee.pk)
+                            date=request.POST['monthdate']
+                            print(date)
+                            mark=attendance_form.cleaned_data.get('mark')
+                            print(mark)
+                            leave_type=attendance_form.cleaned_data.get('leave_type')
+                            print('leave-type',leave_type)
+                            try:
+                                last_record=Attendance.objects.filter(employee = employee.pk).latest('id')
+                                print('last_Record',last_record)
+                            except ObjectDoesNotExist:
+                                last_record = None
+                                print('last_Record',last_record)
+                            try:
+                        
+                                dsgn=Designation_History.objects.filter(employee=employee.pk).latest('id')
+                                print('dsgn-pl',dsgn.designation.privilege_leave)
+                                if last_record: 
+                                    remPrivilegeLeave = last_record.remPrivilegeLeave
+                                    remCasualLeave = last_record.remCasualLeave
+                                    pl = last_record.pl
+                                    cl = last_record.cl
+                                    lop= last_record.lop
+                                    print('rempl',remPrivilegeLeave)
+                        
+                                else:
+                        
+                                    remPrivilegeLeave = dsgn.designation.privilege_leave
+                                    remCasualLeave = dsgn.designation.casual_leave
+                                    pl=0
+                                    cl=0
+                                    lop=False
+                                
+                            
                 
-                    except:
-                        messages.success(request,'Please complete employee profile before mark attendance !!')
+                    
+                                print('employee',employee)
+                                print('date',date)
+                                print('mark',mark)
+                                print('leave_Type',leave_type)
+                                print('remPrivilegeLeave',remPrivilegeLeave)
+                                print('remCasualLeave',remCasualLeave)
+                                print('pl',pl)
+                                print('cl',cl)
+                                print('lop',lop)
+                                # if not lop:
+                                #     lop=False
+                        
+                                new_records.append(Attendance(
+                                    employee=employee,
+                                    date=date,
+                                    mark=mark,
+                                    leave_type=leave_type,
+                                    remPrivilegeLeave=remPrivilegeLeave,
+                                    remCasualLeave=remCasualLeave,
+                                    pl=pl,
+                                    cl=cl,
+                                    lop=lop
+                                ))
+                        
+                                print('new_Records',new_records)
+                
+                            except ObjectDoesNotExist:
+                                messages.success(request,'Please complete employee profile before mark attendance !!')
+                                return redirect('mark_attendance')
+                        else:
+                            messages.success(request,'Attendance has marked for %s'%(employee))
+                    try:
+                        
+                        Attendance.objects.bulk_create(new_records)
+                        messages.success(request,'Record created !')
                         return redirect('mark_attendance')
-            
-                try:
-                    print('new_Records',new_records)
-                    Attendance.objects.bulk_create(new_records)
-                    messages.success(request,'Record created !')
-                    return redirect('mark_attendance')
-                except:
-                    messages.success(request,'Bulk_create error !')
+                    except:
+                        messages.success(request,'Bulk_create error !')
+                        return redirect('mark_attendance')
+                else:
+                    messages.success(request,'Attendance cannot be marked on holiday!')
                     return redirect('mark_attendance')
             else:
-                messages.success(request,'Attendance has already marked !')
-                return redirect('mark_attendance')
+                 messages.success(request,'Attendance has marked for this date!')
+                 return redirect('mark_attendance')
         else:
             messages.success(request,'Invalid details !')
             return redirect('mark_attendance')
     else:
-
-        # query=Employee.objects.filter(company=company)
-        # paginator = Paginator(query, 5)  # Show 10 forms per page
-        # page = request.GET.get('page')
-        # try:
-        #     objects = paginator.page(page)
-        # except PageNotAnInteger:
-        #     objects = paginator.page(1)
-        # except EmptyPage:
-        #     objects = paginator.page(paginator.num_pages)
-        # page_query = Employee.objects.filter(id__in=[object.id for object in objects])
-        #formset = FormSet(queryset=page_query)
-                                        
-
-
-        
-        form=ViewAttendanceCompanyForm({'monthdate':timezone.now()})
-        Attendance_FormSet=AttendanceFormSet(initial=data)
-    return render(request,'attendance/new_mark_attendance.html',{'Attendance_FormSet':Attendance_FormSet,'form':form})
+        #attendance_form=AttendanceForm(company=company)
+        form=ViewAttendanceCompanyForm({'monthdate':datetime.datetime.now().date()})
+        Attendance_FormSet=AttendanceFormSet(form_kwargs={'company':company})
+        #formset = ArticleFormSet(form_kwargs={'user': request.user})
+    return render(request,
+                  'attendance/new_mark_attendance.html',
+                  {
+                      'Attendance_FormSet':Attendance_FormSet,
+                      'form':form                
+                  }
+    )
 
 
 def mark_attendance(request,pk=None):
@@ -300,6 +304,7 @@ def mark_attendance(request,pk=None):
     return render(request,'attendance/mark_attendance.html',{'form':form,'record':record })
 
 def view_attendance_employee(request):
+    company=request.user.employee.company
     if request.method=="POST":
         form=ViewAttendanceForm(request.POST)
         print('employee',form['employee'])
@@ -312,16 +317,17 @@ def view_attendance_employee(request):
             print(emp_id)
             print(type(request.POST['start_date']))
             print(request.POST['end_date'])
-            records=Attendance.objects.filter(employee = emp_id, date__range=[request.POST['start_date'],request.POST['end_date']])
+            mark=request.POST['mark']
+            records=Attendance.objects.filter(employee = emp_id,mark=mark, date__range=[request.POST['start_date'],request.POST['end_date']])
             print('records',records)
-            messages.success(request,'Valid Credentials')
-            return render(request,'attendance/attendance_detail.html',{'records':records})
+            
+            return render(request,'attendance/view_attendance.html',{'form':form,'records':records})
         #return redirect('view_attendance_employee',{'records':records})
         else:
             messages.success(request,'Invalid Details !')
             return redirect('view_attendance')
     else:
-        form=ViewAttendanceForm()
+        form=ViewAttendanceForm(company=company)
         
     return render(request,'attendance/view_attendance.html',{'form':form })
 
@@ -330,13 +336,14 @@ def view_attendance_company(request):
     data={
         'monthdate':date
     }
+    company=request.user.employee.company
     if request.method=="POST":
 
         form=ViewAttendanceCompanyForm(request.POST)
         print('date:',request.POST['monthdate'])
         if form.is_valid():
             date=request.POST['monthdate']
-            emp_count=Employee.objects.filter(company=16)
+            emp_count=Employee.objects.filter(company=company)
             try:
                 records=Attendance.objects.filter(employee__in=emp_count,date=date)
                 
@@ -354,7 +361,7 @@ def view_attendance_company(request):
             
     else:
         form=ViewAttendanceCompanyForm(initial=data)
-        emp_count=Employee.objects.filter(company=16)
+        emp_count=Employee.objects.filter(company=company)
         try:
             records=Attendance.objects.filter(employee__in=emp_count,date=date)
             
@@ -362,6 +369,22 @@ def view_attendance_company(request):
             records=None
             
     return render(request,'attendance/view_attendance_company.html',{'form':form,'records':records,'date':date})        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def leave_application(request):
     user=request.user.employee

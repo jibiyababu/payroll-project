@@ -1,0 +1,87 @@
+{% extends 'payroll/base.html' %}
+{%include 'login/messages.html' %}
+
+{% block content %}
+<h1> Salary Details  </h1>
+
+<div class="btn-toolbar mb-2 mb-md-0">
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+
+            <a class="active btn btn-light btn-sm" href="{% url 'update_salary' pk=pk  %}">
+                <span class="glyphicon glyphicon-plus"></span>Update Salary Structure
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class=" btn btn-light btn-sm" href="{% url 'salary_pending_list'  %}">Pending Salary
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+
+            <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            </a>
+        </li>
+
+        <div class="dropdown-left">
+            <Button type="button"  id="dropdown-toggle" class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown">Appraisal</Button>
+
+            <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'salary_increment'  %}">Appraise</a>
+                <a class="dropdown-item" href="{% url 'salary_increment_list'  %}">View Appraisal</a>
+            </div>
+        </div>
+
+
+        <li class="nav-item">
+            <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+</div>
+
+
+<div class="col-sm-7">
+        {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+
+    <form method="POST" class="employee-form">{% csrf_token %}
+
+        <div class="row ">
+             <div class="col-6">
+                    <div class="form-group">
+                        {{ form.employee.errors }}
+                        {{ form.employee.label_tag }}
+                        {{ form.employee }}
+                    </div>
+                </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="id_month_year">Payslip for month-year:</label>
+                    {{ form.month_year.errors}}
+
+                    {{ form.month_year }}
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" name="btn_submit" class="btn btn-primary btn-md">Generate Salary Slip</button>
+
+           </form>
+
+
+
+        {% endblock %}

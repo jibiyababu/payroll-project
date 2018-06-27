@@ -45,7 +45,7 @@
 
     <form method="POST" class="employee-form">{% csrf_token %}
 
-
+ <div class="alert alert-light text-center" role="alert">Personal Information:</div>
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -77,24 +77,35 @@
 
 
         <div class="row">
-            <div class="col">
+            <div class="col-6">
                 <div class="form-group">
-                    {{ form.address.errors }}
-                    {{ employeeform.address.label_tag }}
-                    {{ employeeform.address}}
+                    {{ employeeform.name.errors }}
+                    {{ employeeform.name.label_tag }}
+                    {{ employeeform.name}}
                 </div>
             </div>
-            <div class="col">
+            <div class="col-6">
                 <div class="form-group">
-                    {{ form.profile_pic.errors }}
+                    {{ employeeform.profile_pic.errors }}
                     {{ employeeform.profile_pic.label_tag }}
                     {{ employeeform.profile_pic}}
-                </div></div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    {{ form.contact.errors }}
+                    {{ employeeform.address.errors }}
+                    {{ employeeform.address.label_tag }}
+                    {{ employeeform.address}}
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    {{ employeeform.contact.errors }}
                     {{ employeeform.contact.label_tag }}
                     {{ employeeform.contact}}
                 </div>
@@ -104,7 +115,7 @@
 
             <div class="col">
                 <div class="form-group">
-                    {{ form.alter_Contact.errors }}
+                    {{ employeeform.alter_Contact.errors }}
                     {{ employeeform.alter_Contact.label_tag }}
                     {{ employeeform.alter_Contact}}
                 </div>
@@ -115,14 +126,22 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    {{ form.Dob.errors }}
+                    {{ employeeform.Dob.errors }}
                     {{ employeeform.Dob.label_tag }}
                     {{ employeeform.Dob}}
                 </div>
             </div>
 
 
-
+             <div class="col">
+                <div class="form-group">
+                    {{ employeeform.gender.errors }}
+                    {{ employeeform.gender.label_tag }}
+                    {{ employeeform.gender}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col">
                 <div class="form-group">
                     {{ employeeform.emailid.errors }}
@@ -133,39 +152,44 @@
             <div class="col">
                 <div class="form-group">
                     {{ employeeform.office_emailid.errors }}
-                    {{ employeeform.office_emailid.label_tag }}
+                    <label for="id_office_emailid">Office Email Address:</label>
                     {{ employeeform.office_emailid}}
                 </div>
             </div>
         </div>
+         <div class="alert alert-light text-center" role="alert">Company Profile:</div>
         <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    {{ employeeform.gender.errors }}
-                    {{ employeeform.gender.label_tag }}
-                    {{ employeeform.gender}}
-                </div>
-            </div>
             <div class="col">
                 <div class="form-group">
                     {{ employeeform.joining_date.errors }}
                     {{ employeeform.joining_date.label_tag }}
-                    {{employeeform.joining_date}}
+                    {{ employeeform.joining_date}}
                 </div>
             </div>
+
+            <!-- <div class="col">
+                 <div class="form-group">
+                 {{ employeeform.office_emailid.errors }}
+                 {{ employeeform.office_emailid.label_tag }}
+                 {{ employeeform.office_emailid}}
+                 </div>
+                 </div> -->
+            <div class="col">
+                <div class="form-group">
+
+                    {{ jobtypeform.job_type.errors }}
+                    {{ jobtypeform.job_type.label_tag }}
+                    {{ jobtypeform.job_type}}
+                </div>
+            </div>
+
         </div>
 
         <div class="row">
             <div class="col">
                 <div class="form-group">
 
-                    <!-- <label for="id_gender">Department:</label>
-                         <select name="gender" placeholder="Gender" class="form-control" id="id_gender">
-                         <option value="M">Software Development</option>
 
-                         <option value="F">Female</option>
-
-                         </select> -->
                     {{ desgform.designation.errors }}
                     {{ desgform.designation.label_tag }}
                     {{ desgform.designation}}
@@ -174,102 +198,84 @@
 
             <div class="col">
                 <div class="form-group">
-                    <!-- <label for="id_gender">Dsignation:</label>
-                         <select name="gender" placeholder="Gender" class="form-control" id="id_gender">
-                         <option value="M">Intern</option>
 
-                         <option value="F">Female</option>
-
-                         </select> -->
                     {{ deptform.department.errors }}
                     {{ deptform.department.label_tag }}
                     {{ deptform.department}}
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <!-- <label for="id_gender">Job Type:</label>
-                         <select name="gender" placeholder="Gender" class="form-control" id="id_gender">
-                         <option value="M">Probation</option>
-
-                         <option value="F">Female</option>
-
-                         </select> -->
-                    {{ jobtypeform.job_type.errors }}
-                    {{ jobtypeform.job_type.label_tag }}
-                    {{ jobtypeform.job_type}}
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    {{ employeeform.salary.errors }}
-                    {{ employeeform.salary.label_tag }}
-                    {{ employeeform.salary}}
-
-                </div>
-            </div>
         </div>
 
 
 
+        <!-- <div class="alert alert-light text-center" role="alert">Salary Details:</div>
+
+             <div class="row">
+             <div class="col">
+             <div class="form-group">
+
+             <label for"id_salary">Annual Salary:</label>
+             {{ salaryincrementform.salary}}
+             </div>
+             </div>
+             <div class="col">
+             <div class="form-group">
+
+             {{ salaryincrementform.effective_from.label_tag }}
+             {{ salaryincrementform.effective_from}}
+             </div>
+             </div>
+             </div>
 
 
+             <div class="alert alert-light text-center" role="alert">Allowance:</div>
 
+             <div class="row">
+             <div class="col">
+             <div class="form-group">
+             {{ salaryform.basic_percentage.errors }}
+             {{ salaryform.basic_percentage.label_tag }}
+             {{ salaryform.basic_percentage}}
+             </div>
+             </div>
+             <div class="col">
+             <div class="form-group">
+             {{ salaryform.hra_percentage.errors }}
+             {{ salaryform.hra_percentage.label_tag }}
+             {{ salaryform.hra_percentage}}
+             </div>
+             </div>
 
+             <div class="col">
+             <div class="form-group">
+             {{ salaryform.conveyance_allowance.errors }}
+             {{ salaryform.conveyance_allowance.label_tag }}
+             {{ salaryform.conveyance_allowance}}
+             </div>
+             </div>
+             </div>
 
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <!-- {{ salaryform.basic_percentage.errors }}-->
-                    {{ salaryform.basic_percentage.label_tag }}
-                    {{ salaryform.basic_percentage}}
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <!-- {{ salaryform.hra_percentage.errors }}-->
-                    {{ salaryform.hra_percentage.label_tag }}
-                    {{ salaryform.hra_percentage}}
-                </div>
-            </div>
+             <div class="alert alert-light text-center" role="alert">Deductions:</div>
+             <div class="row">
 
-            <div class="col">
-                <div class="form-group">
-                    <!-- {{ salaryform.conveyance_allowance.errors }}-->
-                    {{ salaryform.conveyance_allowance.label_tag }}
-                    {{ salaryform.conveyance_allowance}}
-                </div>
-            </div>
+             <div class="col">
+             <div class="form-group">
+             {{ salaryform.proffessional_tax.errors }}
+             {{ salaryform.proffessional_tax.label_tag }}
+             {{ salaryform.proffessional_tax}}
+             </div>
+             </div>
+             <div class="col">
+             <div class="form-group">
+             {{ salaryform.income_tax.errors }}
+             {{ salaryform.income_tax.label_tag }}
+             {{ salaryform.income_tax}}
+             </div>
+             </div>
+             </div>
+           -->
+        <div class="row justify-content-center mb-4">
+            <button type="submit" class="btn btn-primary btn-md" name="btnCompany">Add</button>
         </div>
-
-
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <!-- {{ salaryform.special_allowance.errors }}-->
-                    {{ salaryform.special_allowance.label_tag }}
-                    {{ salaryform.special_allowance}}
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <!-- {{ salaryform.proffessional_tax.errors }} -->
-                    {{ salaryform.proffessional_tax.label_tag }}
-                    {{ salaryform.proffessional_tax}}
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <!-- {{ salaryform.income_tax.errors }} -->
-                    {{ salaryform.income_tax.label_tag }}
-                    {{ salaryform.income_tax}}
-                </div>
-            </div>
-        </div>
-
-
-        <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Add</button>
         {% endblock %}

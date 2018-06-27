@@ -16,9 +16,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
-
-
-
 @login_required(login_url = "login")
 def company_homepage(request):
 
@@ -34,14 +31,16 @@ def edit_company(request):
     pk=request.user.employee.company.pk
     company = get_object_or_404(Company,pk=pk)
     if request.method == "POST":
-        form=CompanyForm(request.POST, instance=company)
+        form=CompanyForm(request.POST,request.FILES, instance=company)
     
         
         if form.is_valid():
-            company=form.save()
+            company=form.save(commit=False)
+            #company.logo = request.FILES['logo']
+            company.save()
             messages.success(request,'Company Updated successfully')
             #request.session['company']=1
-            return redirect('add_holiday'# ,pk=company
+            return redirect('edit_company'# ,pk=company
             )
         else:
             messages.success(request,'Invalid Credentials')
@@ -57,21 +56,23 @@ def edit_company(request):
 @login_required(login_url = "login")
 def add_holiday(request):
     pk=request.user.employee.company
-    # holiday_list=Holiday.objects.all().filter(company=pk).values_list()
     holiday_list= Holiday.objects.filter(company=pk)
     if request.method == "POST":
         form=HolidayForm(request.POST)
         if form.is_valid():
-            
-            holiday= form.save(commit=False)
-            holiday.company=pk
-            holiday.save()
-            print('holiday',holiday.company)
-            messages.success(request,'Holiday added successfully')
-            return render(request,'company/holiday_edit.html',
+            holiday_exist=Holiday.objects.filter(company=pk,name=request.POST['name']).exists()
+            if not holiday_exist:
+                holiday= form.save(commit=False)
+                holiday.company=pk
+                holiday.save()
+                print('holiday',holiday.company)
+                messages.success(request,'Holiday added successfully !')
+                return render(request,'company/holiday_edit.html',
                   {'form':form,
                    'holiday_list':holiday_list}
                  )
+            else:
+                messages.success(request,'Holiday has been already added !')
         else:
             messages.success(request,'Invalid Credentials')
             return redirect(add_holiday)
@@ -111,16 +112,20 @@ def add_worktype(request):
     if request.method == "POST":
         form=WorkTypeForm(request.POST)
         if form.is_valid():
-            work_type = form.save(commit=False)
-            work_type.company=pk
-            work_type.save()
-            messages.success(request,'Work-Type added successfully')
-            return render(request,
-                  'company/worktype_edit.html',
-                  {'form':form,
-                   'worktype_list':worktype_list
-                  }
-                 )
+            worktype_exist=Work_Type.objects.filter(company=pk,worktype=request.POST['worktype']).exists()
+            if not worktype_exist:
+                work_type = form.save(commit=False)
+                work_type.company=pk
+                work_type.save()
+                messages.success(request,'Work-Type added successfully !')
+                return render(request,
+                              'company/worktype_edit.html',
+                              {'form':form,
+                               'worktype_list':worktype_list
+                              }
+                )
+            else:
+                messages.success(request,'Work-Type has been already added !')
         else:
             messages.success(request,'Invalid Credentials')
             return redirect(add_worktype)
@@ -141,16 +146,20 @@ def add_designation(request):
     if request.method == "POST":
         form = DesignationForm(request.POST)
         if form.is_valid():
-            designation=form.save(commit=False)
-            designation.company=pk
-            designation = form.save()
-            messages.success(request,'Designation added successfully')
-            return render(request,
-                  'company/designation_edit.html',
-                  {'form':form,
-                   'desg':desg
-                  }
-                 )
+            designation_exist=Designation.objects.filter(company=pk,designation=request.POST['designation']).exists()
+            if not designation_exist:
+                designation=form.save(commit=False)
+                designation.company=pk
+                designation = form.save()
+                messages.success(request,'Designation added successfully !')
+                return render(request,
+                              'company/designation_edit.html',
+                              {'form':form,
+                               'desg':desg
+                              }
+                )
+            else:
+                messages.success(request,'Designation has been already added !')
         else:
             messages.success(request,'Invalid Credentials')
             return redirect(add_designation)
@@ -171,16 +180,20 @@ def add_department(request):
     if request.method == "POST":
         form = DepartmentForm(request.POST)
         if form.is_valid():
-            department=form.save(commit=False)
-            department.company=pk
-            department = form.save()
-            messages.success(request,'Department added successfully')
-            return render(request,
-                  'company/department_edit.html',
-                  {'dept':dept,
-                   'form':form
-                  }
-                 )
+            department_exist=Department.objects.filter(company=pk,department=request.POST['department'])
+            if not department_exist:
+                department=form.save(commit=False)
+                department.company=pk
+                department = form.save()
+                messages.success(request,'Department added successfully !')
+                return render(request,
+                              'company/department_edit.html',
+                              {'dept':dept,
+                               'form':form
+                              }
+                )
+            else:
+                messages.success(request,'Department has been already  added !')
         else:
             messages.success(request,'Invalid Credentials')
             return redirect(add_designation)
@@ -200,16 +213,20 @@ def add_jobtype(request):
     if request.method == "POST":
         form = JobTypeForm(request.POST)
         if form.is_valid():
-            record=form.save(commit=False)
-            record.company=pk
-            record = form.save()
-            messages.success(request,'JobType added successfully')
-            return render(request,
-                  'company/jobtype_detail.html',
-                  {'form':form,
-                   'jobtype':jobtype
-                  }
-                 )
+            jobtype_exist=Job_Type.objects.filter(company = pk, jobtype=request.POST['jobtype']).exists()
+            if not jobtype_exist:
+                record=form.save(commit=False)
+                record.company=pk
+                record = form.save()
+                messages.success(request,'JobType added successfully')
+                return render(request,
+                              'company/jobtype_edit.html',
+                              {'form':form,
+                               'jobtype':jobtype
+                              }
+                )
+            else:
+                messages.success(request,'Job-Type has been already added !')
         else:
             messages.success(request,'Invalid Credentials')
             return redirect(add_jobtype)

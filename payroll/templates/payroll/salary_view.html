@@ -31,6 +31,17 @@
             <a class="btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
             </a>
         </li>
+
+<div class="dropdown-left">
+            <Button type="button"  id="dropdown-toggle" class="btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown">Appraisal</Button>
+
+       <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'salary_increment'  %}">Appraise</a>
+                <a class="dropdown-item" href="{% url 'salary_increment_list'  %}">View Appraisal</a>
+            </div>
+        </div>
+
+
         <li class="nav-item">
             <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
             </a>

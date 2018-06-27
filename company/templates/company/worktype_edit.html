@@ -61,15 +61,12 @@
         </div>
 
 
-        <button type="submit" class="btn btn-primary btn-sm" name="btnCompany">Add</button>
+            <button type="submit" class="btn btn-primary btn-md" name="btnCompany">Add</button>
 
-<a class="btn btn-primary btn-sm" href="{% url 'add_jobtype'  %}">Add Job-Type</a>
 
-        <!-- {% for r in holiday %}
-             <p> {{r.name}}</p>
-             <p> {{r.date}}</p>
-             {% endfor %}
-           -->
+
+
+{% if worktype_list %}
 <div class="row mt-4">
     <div class="col">
         <table class="table table-md" style="width: 80.66%">
@@ -95,6 +92,6 @@
         </table>
     </div>
 </div>
-
+{% endif %}
 
         {% endblock  %}

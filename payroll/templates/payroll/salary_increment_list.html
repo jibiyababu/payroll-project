@@ -1,0 +1,118 @@
+{% extends 'payroll/base.html' %}
+{%include 'payroll/messages.html' %}
+{% block content %}
+
+<h1>Salary Increment List</h1>
+<div class="btn-toolbar mb-2 mb-md-0">
+    <ul class="nav nav-tabs">
+
+
+
+        <li class="nav-item">
+            <a class=" btn btn-light btn-sm" href="{% url 'update_salary'  %}">Update Salary
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class=" btn btn-light btn-sm" href="{% url 'salary_pending_list'  %}">Pending Salary
+            </a>
+        </li>
+
+        <li class="nav-item">
+
+            <a class=" btn btn-light btn-sm" href="{% url 'salary_employee_list'  %}">Employee
+            </a>
+
+        </li>
+
+         <div class="dropdown-left">
+                    <Button type="button"  id="dropdown-toggle" class=" active btn btn-light dropdown-toggle btn-sm" data-toggle="dropdown">Appraisal</Button>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item"  href="{% url 'salary_increment'  %}">Appraise</a>
+                        <a class="dropdown-item" href="{% url 'salary_increment_list'  %}">View Appraisal</a>
+                    </div>
+                    </div>
+
+        <li class="nav-item">
+
+            <a class="btn btn-light btn-sm" href="{% url 'view_salary'  %}">Salary Report
+            </a>
+
+        </li>
+
+
+
+    </ul>
+</div>
+
+
+
+
+</div>
+
+<div class="col-sm-7">
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+
+        {{ message }}
+
+    </div>
+    {% endfor %}
+</div>
+
+<form method="POST" class="employee-form">{% csrf_token %}
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                {{ form.errors }}
+                {{ form.non_field_errors }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3 jutify-center">
+            <div class="form-group">
+                {{ form.employee.errors }}
+                {{ form.employee.label_tag }}
+                {{ form.employee }}
+            </div>
+        </div>
+
+
+    </div>
+        <button type="submit" class="btn btn-primary btn-sm">submit</button>
+</form>
+{% if record%}
+
+<!-- <table class="mt-5 table-wrap" style=" ">
+     <thead class="thead-dark">
+   -->
+
+         <div class=" mt-5 col-8 table-wrap">
+    <div class="table-responsive-sm">
+        <table style="border-collapse-separate" class="  main-table table table-sm table-striped">
+            <thead class="thead-dark">
+                    <tr>
+                        <th  scope="col">Date</th>
+                        <th scope="col">Effective From</th>
+                        <th  scope="col">Salary</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in record %}
+                    <tr>
+                        <td>{{object.date}}</td>
+                        <td >{{object.effective_from}}</td>
+                        <td>{{object.salary}}</td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+</div>
+{% endif %}
+{%endblock%}

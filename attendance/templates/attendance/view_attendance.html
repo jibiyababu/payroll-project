@@ -7,20 +7,20 @@
 <div class="btn-toolbar mb-2 mb-md-0">
     <ul class="nav nav-tabs">
 
-     <li class="nav-item">
-     <a class="nav-link" href="{% url 'mark_attendance'  %}">Mark Attendance</a>
-     </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'mark_attendance'  %}">Mark Attendance</a>
+        </li>
 
-     <li class="nav-item">
-     <a class="nav-link active" href="{% url 'view_attendance'  %}">View Attendance</a>
-     </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'view_attendance'  %}">View Attendance</a>
+        </li>
 
 
-     <li class="nav-item">
-     <a class="nav-link" href="{% url 'view_attendance_company'  %}">View Attendance Company</a>
-     </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'view_attendance_company'  %}">View Attendance Company</a>
+        </li>
     </ul>
-    </div>
+</div>
 
 
 </div>
@@ -34,50 +34,92 @@
     </div>
     {% endfor %}
 
-
-
-
-    <form method="POST" class="employee-form">{% csrf_token %}
-
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    {{ form.errors }}
-                    {{ form.non_field_errors }}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    {{ form.employee.errors }}
-                    {{ form.employee.label_tag }}
-                    {{ form.employee }}
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="form-group">
-                    {{ form.start_date.errors }}
-                    {{ form.start_date.label_tag }}
-                    {{ form.start_date }}
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="form-group">
-                    {{ form.end_date.errors }}
-                    {{ form.end_date.label_tag }}
-                    {{ form.end_date }}
-                </div>
-            </div>
 </div>
 
-                    <div class ="row justify-content-center">
-                        <button type="submit" class="btn btn-primary btn-sm">View</button>
 
-                    </div>
+<form method="POST" class="employee-form">{% csrf_token %}
 
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                {{ form.errors }}
+                {{ form.non_field_errors }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                {{ form.employee.errors }}
+                {{ form.employee.label_tag }}
+                {{ form.employee }}
+            </div>
+        </div>
 
+        <div class="col-md-3">
+            <div class="form-group">
+                {{ form.start_date.errors }}
+                {{ form.start_date.label_tag }}
+                {{ form.start_date }}
+            </div>
+        </div>
 
-{% endblock  %}
+        <div class="col-md-3">
+            <div class="form-group">
+                {{ form.end_date.errors }}
+                {{ form.end_date.label_tag }}
+                {{ form.end_date }}
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                {{ form.mark.errors }}
+                {{ form.mark.label_tag }}
+                {{ form.mark }}
+            </div>
+        </div>
+    </div>
+
+    <div class ="row justify-content-center">
+        <button type="submit" class="btn btn-primary btn-sm">View</button>
+
+    </div>
+
+</form>
+
+{% if records%}
+
+<!-- <table class="mt-5 table-wrap" style=" ">
+     <thead class="thead-dark">
+   -->
+
+<div class=" mt-5 col-7 table-wrap">
+    <div class="table-responsive-sm">
+        <table style="border-collapse-separate" class="  main-table table table-sm table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th width="20" scope="col">Date</th>
+                    <th width="40" scope="col">Name</th>
+                    <th width="40" scope="col">Mark</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in records %}
+                <tr>
+                    <td style="width: 16.66%">{{obj.date}}</td>
+                    <td>{{obj.employee}}</td>
+                    <td >{{obj.mark}}</td>
+                    <!-- {% ifequal obj.leave_type "" %}
+                         <td><p>None</p></td>
+                         {% else %}
+                         <td >{{obj.leave_type}}</td>
+                         {% endifequal %} -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% endif %}
+    {% endblock  %}
