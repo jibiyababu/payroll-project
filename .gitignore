@@ -1,6 +1,0 @@
-#ignore files and folders
-mysite/
-myvenv/
-manage.py
-*.sqlite3
-__pycache__/
