@@ -45,102 +45,165 @@ def new_mark_attendance(request):
             date=datetime.datetime.strptime(request.POST['monthdate'], "%Y-%m-%d")
             holiday=Holiday.objects.filter(date=date).exists()
             
-            
-            
-            if not False:
-                if not holiday and not date.weekday() == 5 and not date.weekday() == 6:
+            if not holiday and not date.weekday() == 5 and not date.weekday() == 6:
 
-                    for attendance_form in Attendance_FormSet:
-                        print('attendance_Form',attendance_form)
+                for attendance_form in Attendance_FormSet:
+                    print('attendance_Form',attendance_form)
                         
 
-                        print('attendance',attendance_form.cleaned_data.get('employee'))
-                        employee=attendance_form.cleaned_data.get('employee')
-                        print('date & employee',date,employee)
-                        attendance_exist=Attendance.objects.filter(employee=employee,date=date).exists()
-                        print('attendance_Exist',attendance_exist)
-                        if not attendance_exist:
-                            print('employee',employee.pk)
-                            date=request.POST['monthdate']
-                            print(date)
-                            mark=attendance_form.cleaned_data.get('mark')
-                            print(mark)
-                            leave_type=attendance_form.cleaned_data.get('leave_type')
-                            print('leave-type',leave_type)
-                            try:
-                                last_record=Attendance.objects.filter(employee = employee.pk).latest('id')
-                                print('last_Record',last_record)
-                            except ObjectDoesNotExist:
-                                last_record = None
-                                print('last_Record',last_record)
-                            try:
+                    print('attendance',attendance_form.cleaned_data.get('employee'))
+                    employee=attendance_form.cleaned_data.get('employee')
+                    print('date & employee',date,employee)
+                    attendance_exist=Attendance.objects.filter(employee=employee,date=date).exists()
+                    print('attendance_Exist',attendance_exist)
+                    if not attendance_exist:
+                        print('employee',employee.pk)
+                        date=request.POST['monthdate']
+                        print(date)
+                        mark=attendance_form.cleaned_data.get('mark')
+                        print(mark)
+                        leave_type=attendance_form.cleaned_data.get('leave_type')
+                        print('leave-type',leave_type)
+                        try:
+                            last_record=Attendance.objects.filter(employee = employee.pk).latest('id')
+                            print('last_Record',last_record)
+                        except ObjectDoesNotExist:
+                            last_record = None
+                            print('last_Record',last_record)
+                        try:
                         
-                                dsgn=Designation_History.objects.filter(employee=employee.pk).latest('id')
-                                print('dsgn-pl',dsgn.designation.privilege_leave)
-                                if last_record: 
-                                    remPrivilegeLeave = last_record.remPrivilegeLeave
-                                    remCasualLeave = last_record.remCasualLeave
-                                    pl = last_record.pl
-                                    cl = last_record.cl
-                                    lop= last_record.lop
-                                    print('rempl',remPrivilegeLeave)
+                            dsgn=Designation_History.objects.filter(employee=employee.pk).latest('id')
+                            print('dsgn-pl',dsgn.designation.privilege_leave)
+                            if last_record: 
+                                remPrivilegeLeave = last_record.remPrivilegeLeave
+                                remCasualLeave = last_record.remCasualLeave
+                                pl = last_record.pl
+                                cl = last_record.cl
+                                lop= last_record.lop
+                                print('rempl',remPrivilegeLeave)
                         
-                                else:
-                        
-                                    remPrivilegeLeave = dsgn.designation.privilege_leave
-                                    remCasualLeave = dsgn.designation.casual_leave
-                                    pl=0
-                                    cl=0
-                                    lop=False
+                            else:
                                 
-                            
-                
+                                remPrivilegeLeave = dsgn.designation.privilege_leave
+                                remCasualLeave = dsgn.designation.casual_leave
+                                pl=0
+                                cl=0
+                                lop=False
+                                
+                            if mark == 0 and leave_type =='Privilege Leave':
+                                if last_record:
+                                    if last_record.pl: 
+                                        if last_record.pl>=dsgn.designation.privilege_leave:
+                                            if last_record.cl<dsgn.designation.casual_leave:
+                                                pl=last_record.pl
+                                                cl=last_record.cl + 1
+                                                remPrivilegeLeave = last_record.remPrivilegeLeave
+                                                remCasualLeave = dsgn.designation.casual_leave - cl
+                                            else:
+                                                pl=last_record.pl
+                                                cl=last_record.cl
+                                                remPrivilegeLeave = last_record.remPrivilegeLeave
+                                                remCasualLeave = last_record.remCasualLeave
+                                                lop = True
+                                        else:
+                                            pl=last_record.pl + 1
+                                            remPrivilegeLeave = dsgn.designation.privilege_leave - pl
+                                            remCasualLeave = last_record.remCasualLeave
+                                    
+                                            if last_record.cl:
+                                                cl=last_record.cl
+                                   
+                                    else:
+                                        pl+=1
+                                        remPrivilegeLeave = dsgn.designation.privilege_leave - pl
+                                        remCasualLeave = last_record.remCasualLeave
+                                        cl = last_record.cl
                     
-                                print('employee',employee)
-                                print('date',date)
-                                print('mark',mark)
-                                print('leave_Type',leave_type)
-                                print('remPrivilegeLeave',remPrivilegeLeave)
-                                print('remCasualLeave',remCasualLeave)
-                                print('pl',pl)
-                                print('cl',cl)
-                                print('lop',lop)
-                                # if not lop:
-                                #     lop=False
+                                else:
+                                    pl+=1
+                                    remPrivilegeLeave = dsgn.designation.privilege_leave - pl
+                                    print('cl',dsgn.designation.casual_leave)
+                                    remCasualLeave = dsgn.designation.casual_leave
+                            
+                           
+                            if mark == 0 and leave_type=='Casual Leave':
+                                if last_record:
+                                    if last_record.cl:
+                                        if last_record.cl >= dsgn.designation.casual_leave:
+                                            if last_record.pl < dsgn.designation.privilege_leave:
+                                                pl=last_record.pl + 1
+                                                cl=last_record.cl
+                                                remPrivilegeLeave = dsgn.designation.privilege_leave - pl
+                                                remCasualLeave = last_record.remCasualLeave
+                                            else:
+                                                lop = True
+                                                pl=last_record.pl
+                                                cl=last_record.cl
+                                                remPrivilegeLeave = last_record.remPrivilegeLeave
+                                                remCasualLeave = last_record.remCasualLeave
+                            
+                                        else:
+                                            cl=last_record.cl + 1
+                                            remCasualLeave = dsgn.designation.casual_leave - cl
+                                            remPrivilegeLeave = last_record.remPrivilegeLeave 
+                                            if last_record.pl:
+                                                pl=last_record.pl
+                                    else:
+                                        cl+=1
+                                        remCasualLeave = dsgn.designation.casual_leave - cl
+                                        remPrivilegeLeave = last_record.remPrivilegeLeave
+                                        pl = last_record.pl 
+                                else:
+                                    cl+=1
+                                    remCasualLeave = dsgn.designation.casual_leave - cl
+                                    remPrivilegeLeave = dsgn.designation.privilege_leave
+
+                                
+                    
+                            print('employee',employee)
+                            print('date',date)
+                            print('mark',mark)
+                            print('leave_Type',leave_type)
+                            print('remPrivilegeLeave',remPrivilegeLeave)
+                            print('remCasualLeave',remCasualLeave)
+                            print('pl',pl)
+                            print('cl',cl)
+                            print('lop',lop)
+                            # if not lop:
+                            #     lop=False
                         
-                                new_records.append(Attendance(
-                                    employee=employee,
-                                    date=date,
-                                    mark=mark,
-                                    leave_type=leave_type,
-                                    remPrivilegeLeave=remPrivilegeLeave,
-                                    remCasualLeave=remCasualLeave,
-                                    pl=pl,
-                                    cl=cl,
-                                    lop=lop
-                                ))
+                            new_records.append(Attendance(
+                                employee=employee,
+                                date=date,
+                                mark=mark,
+                                leave_type=leave_type,
+                                remPrivilegeLeave=remPrivilegeLeave,
+                                remCasualLeave=remCasualLeave,
+                                pl=pl,
+                                cl=cl,
+                                lop=lop
+                            ))
                         
-                                print('new_Records',new_records)
-                
-                            except ObjectDoesNotExist:
-                                messages.success(request,'Please complete employee profile before mark attendance !!')
-                                return redirect('mark_attendance')
-                        else:
-                            messages.success(request,'Attendance has marked for %s'%(employee))
-                    try:
+                            print('new_Records',new_records)
+                            
+                        except ObjectDoesNotExist:
+                            messages.success(request,'Please complete employee profile before mark attendance !!')
+                            return redirect('mark_attendance')
+                    else:
+                        messages.success(request,'Attendance has marked for %s'%(employee))
+                try:
                         
-                        Attendance.objects.bulk_create(new_records)
-                        messages.success(request,'Record created !')
-                        return redirect('mark_attendance')
-                    except:
-                        messages.success(request,'Bulk_create error !')
-                        return redirect('mark_attendance')
-                else:
-                    messages.success(request,'Attendance cannot be marked on holiday!')
+                    Attendance.objects.bulk_create(new_records)
+                    messages.success(request,'Record created !')
+                    return redirect('mark_attendance')
+                except:
+                    messages.success(request,'Bulk_create error !')
                     return redirect('mark_attendance')
             else:
-                 messages.success(request,'Attendance has marked for this date!')
-                 return redirect('mark_attendance')
+                messages.success(request,'Attendance cannot be marked on holiday!')
+                return redirect('mark_attendance')
+        
+            
         else:
             messages.success(request,'Invalid details !')
             return redirect('mark_attendance')
