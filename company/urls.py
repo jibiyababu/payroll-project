@@ -1,5 +1,6 @@
 from django.conf.urls import url
-from . import views
+from company import views
+import login
 
 urlpatterns = [
            url(r'^company/$',views.edit_company,name='edit_company'),
@@ -19,6 +20,6 @@ urlpatterns = [
    
         url(r'^designation/detail/$',views.designation_detail,name='designation_detail'),
          url(r'^designation/(?P<pk>\d+)/$',views.designation_delete,name='designation_delete'),
-       url(r'^company/home/$',views.company_homepage,name='company_homepage')
+       # url(r'^company/home/$',login.views.dashboard,name='company_homepage')
     
 ]

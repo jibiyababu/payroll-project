@@ -1,0 +1,54 @@
+{% extends 'login/dashboard_index.html'%}
+{% load staticfiles %}
+
+<div>
+    {% block content %}
+
+        <table style="table-layout: fixed; width:100%;">
+            <tr>
+                <td>
+                    <div class="col" style="padding-left:50px;padding-right:50px;">
+                        <h3><img src="{% static 'images/graph.png' %}" width="40px" height="40px"/> Net Salary Distribution Chart of Current Year :</h3>
+                        <canvas class="my-4" id="myChart" height="350" style="width:100%;"></canvas>
+                    </div>
+                </td>
+                <td>
+                    <div class="col" style="padding-left:50px;padding-right:50px;">
+                        <h3><img src="{% static 'images/users.png' %}" width="40px" height="40px"/> Employees :</h3>
+                        <canvas class="my-4" id="myPie" height="350" style="width:100%;"></canvas>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <table style="table-layout: fixed; width:100%;">
+            <tr>
+                <td>
+                    <div style="padding-left:50px;padding-right:50px;">
+                        <h3><!-- <img src="{% static 'images/cake.png' %}" width="40px" height="40px"/> --> Todays Birthdays :</h3>
+                        <div class="row">
+                            {% for obj in birthday_emp %}
+                            <div class="col-2">
+                                <img src={{ obj.profile_pic.url }} style="width:100px; border-radius:30%;" />
+                                <p style="text-align:center;">
+                                    {{ obj.name }}
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="padding-left:50px;padding-right:50px;">
+                        <h3><!-- <img src="{% static 'images/gender-signs.png' %}" width="40px" height="40px"/> --> Gender Ratio :</h3>
+                        <div class="row">
+                            <canvas class="my-4" id="myChart2" style="width:100%;"></canvas>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+
+{% endblock %}
+</div>
